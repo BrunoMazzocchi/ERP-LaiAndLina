@@ -15,6 +15,7 @@ public class Note {
     @Column
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "client_seq")
     private Integer id;
+    private String title;
     private String description;
 
 
