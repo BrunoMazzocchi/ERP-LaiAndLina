@@ -1,0 +1,62 @@
+<nav th:fragment="sidebar" class="sidebar sidebar-offcanvas" id="sidebar">
+  <ul class="nav">
+    <li class="nav-item">
+      <a class="nav-link" href="/control/index">
+        <i class="mdi mdi-grid-large menu-icon"></i>
+        <span class="menu-title">Dashboard</span>
+      </a>
+    </li>
+    <li class="nav-item nav-category">Ordenes</li>
+    <li class="nav-item">
+      <a class="nav-link" data-bs-toggle="collapse" href="#orders" aria-expanded="false" aria-controls="orders">
+        <i class="menu-icon mdi mdi-floor-plan"></i>
+        <span class="menu-title">Pedidos</span>
+        <i class="menu-arrow"></i>
+      </a>
+      <div class="collapse" id="orders">
+        <ul class="nav flex-column sub-menu">
+          <li class="nav-item"> <a class="nav-link" href="/control/orders">Pedidos activos</a></li>
+          <li class="nav-item"> <a class="nav-link" href="/control/ordersCompleted"> Pedidos completados</a></li>
+          <li class="nav-item"> <a class="nav-link" href="/control/newOrder"> Crear pedido</a></li>
+        </ul>
+      </div>
+    </li>
+
+    <li class="nav-item nav-category">Producción</li>
+    <li class="nav-item">
+      <a class="nav-link" data-bs-toggle="collapse" href="#production" aria-expanded="false" aria-controls="production">
+        <i class="menu-icon mdi mdi-floor-plan"></i>
+        <span class="menu-title">Producción</span>
+        <i class="menu-arrow"></i>
+      </a>
+      <div class="collapse" id="production">
+        <ul class="nav flex-column sub-menu">
+          <li class="nav-item"> <a class="nav-link" href="/control/clients">Clientes</a></li>
+        </ul>
+        <ul class="nav flex-column sub-menu">
+          <li class="nav-item"> <a class="nav-link" href="/control/products">Productos</a></li>
+        </ul>
+        <ul class="nav flex-column sub-menu">
+          <li class="nav-item"> <a class="nav-link" href="/control/materials">Materiales</a></li>
+        </ul>
+      </div>
+    </li>
+
+
+    <li class="nav-item nav-category">Empresa</li>
+    <li class="nav-item">
+      <a class="nav-link" data-bs-toggle="collapse" href="#business" aria-expanded="false" aria-controls="business">
+        <i class="menu-icon mdi mdi-floor-plan"></i>
+        <span class="menu-title">Empresa</span>
+        <i class="menu-arrow"></i>
+      </a>
+      <div class="collapse" id="business">
+        <ul class="nav flex-column sub-menu">
+          <li class="nav-item"> <a class="nav-link" href="/control/user/users">Usuarios</a></li>
+        </ul>
+      </div>
+    </li>
+
+
+  </ul>
+</nav>
