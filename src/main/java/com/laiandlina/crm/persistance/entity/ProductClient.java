@@ -28,11 +28,11 @@ public class ProductClient {
     private Integer state;
 
     @ManyToOne
-    @JoinColumn(name = "id_product")
+    @JoinColumn(name = "idProduct", updatable = false, insertable = false)
     private Product product;
 
     @ManyToOne
-    @JoinColumn(name = "id_client")
+    @JoinColumn(name = "idClient", updatable = false, insertable = false)
     private Client client;
 
     @OneToMany(mappedBy="productClient")

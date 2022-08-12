@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Data
 @Getter
 @Setter
-@Table(name = "notes")
+@Table(name = "note")
 public class Note {
 
     @Id
@@ -16,16 +16,14 @@ public class Note {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "client_seq")
     private Integer id;
     private String description;
-    private Integer idUser;
-    private Integer idProductClient;
 
 
         @ManyToOne
-        @JoinColumn(name = "id_user")
+        @JoinColumn(name = "idUser")
          private User user  ;
 
-    @ManyToOne
-    @JoinColumn(name = "id_productClient")
-    private ProductClient productClient  ;
+        @ManyToOne
+        @JoinColumn(name = "idProductClient")
+        private ProductClient productClient  ;
 
 }

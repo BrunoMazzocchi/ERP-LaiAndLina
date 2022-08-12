@@ -1,7 +1,10 @@
 package com.laiandlina.crm.persistance.entity;
 
-import javax.persistence.*;
+import lombok.*;
 
+import javax.persistence.*;
+@Entity
+@Data
 public class Client {
     @Id
     @Column
