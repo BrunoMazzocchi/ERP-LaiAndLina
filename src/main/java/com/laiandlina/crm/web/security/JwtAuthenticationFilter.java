@@ -1,7 +1,7 @@
 package com.laiandlina.crm.web.security;
 
 
-import com.mazzocchi.crmdemo.domain.service.*;
+import com.laiandlina.crm.domain.service.*;
 import org.slf4j.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.security.authentication.*;
@@ -55,12 +55,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
+    //We are checking if there is a jwt located in cookies.
+    //This process will review cookies after sign in. If cookies with auth name are present, it will check.
+
     private String getJwt(HttpServletRequest request) {
         String authHeader = "";
 
             if (getCookieByName(request, "Authorization").getName().equals("Authorization")) {
                 return authHeader = getCookieByName(request, "Authorization").getValue();
-            }
+            } else if(getCookieByName(request, "Authorization")  == null) {
+                return authHeader = "";
+        }
 
         return authHeader;
     }

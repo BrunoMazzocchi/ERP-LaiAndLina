@@ -1,8 +1,8 @@
 package com.laiandlina.crm.web.config;
 
 
-import com.mazzocchi.crmdemo.domain.service.*;
-import com.mazzocchi.crmdemo.web.security.*;
+import com.laiandlina.crm.domain.service.*;
+import com.laiandlina.crm.web.security.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.web.servlet.*;
 import org.springframework.context.annotation.*;
@@ -96,7 +96,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.html",
                         "/**/*.css",
                         "/**/*.js").permitAll()
-                .antMatchers("/**/api/auth/**").permitAll()
+                .antMatchers("/**/**").permitAll()
                 .anyRequest().authenticated()
                 .and().formLogin()
                 .failureForwardUrl("/login")

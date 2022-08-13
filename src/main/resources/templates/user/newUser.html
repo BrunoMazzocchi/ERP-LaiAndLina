@@ -31,6 +31,8 @@
 
     <!-- partial:partials/_navbar.html -->
     <div th:replace="fragments/nav.html :: nav"></div>
+
+    <!--    <div th:replace="fragments/nav.html :: nav"></div>-->
     <!-- partial main -->
 
 
@@ -232,10 +234,26 @@
                 <div class="row ">
                     <div class="col-md-8 grid-margin stretch-card">
                         <div class="card">
-                            <form method="post" action="#" th:action="@{/api/auth/signup}" th:object="${signUpRequest}">
+                            <form method="post" action="#" th:action="@{/auth/signup}" th:object="${signUpRequest}">
                                 <div class="card-body">
                                     <h4 class="card-title">Nuevo usuario</h4>
                                     <div class="form-group">
+                                        <h4 class="card-title">Nombre del usuario</h4>
+                                        <div class="form-group">
+
+                                            <input style="margin-bottom: 10px" class="form-control" type="text" th:name="|firstName|"
+                                                   placeholder="Nombre"/>
+
+                                            <input class="form-control" type="text" th:name="|lastName|"
+                                                   placeholder="Apellido"/>
+
+                                        </div>
+                                        <h4 class="card-title">Email del usuario</h4>
+                                        <div class="form-group">
+                                            <input class="form-control" type="text" th:name="|email|"/>
+
+                                        </div>
+
 
                                         <h4 class="card-title">Rol del usuario</h4>
                                         <div class="form-group">
@@ -245,21 +263,20 @@
                                                         th:text="${role.roleName}"></option>
                                             </select>
                                         </div>
-                                        <h4 class="card-title">Nombre del usuario</h4>
+
+                                        <h4 class="card-title">Departamento del usuario</h4>
                                         <div class="form-group">
-
-                                            <input class="form-control" type="text" th:name="|name|"/>
-
+                                            <select id="department" class="js-example-basic-single w-100" th:name="|department|">
+                                                <option value="0">Selecciona...</option>
+                                                <option th:each="department: ${departments}" th:value="${department.id}"
+                                                        th:text="${department.departmentName}"></option>
+                                            </select>
                                         </div>
-                                        <h4 class="card-title">Email del usuario</h4>
-                                        <div class="form-group">
-                                            <input class="form-control" type="text" th:name="|email|"/>
 
-                                        </div>
 
                                         <h4 class="card-title">Número del usuario</h4>
                                         <div class="form-group">
-                                            <input class="form-control" type="text" th:name="|phonenNmber|"/>
+                                            <input class="form-control" type="text" th:name="|phonenNumber|"/>
 
 
                                         </div>

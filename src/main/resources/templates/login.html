@@ -37,7 +37,7 @@
                         </div>
                         <h4>Hola de nuevo! Iniciemos</h4>
                         <h6 class="fw-light">Ingresa tus credenciales para continuar.</h6>
-                        <form method="post" action="#" th:action="@{/api/auth/signin}" th:object="${login}">
+                        <form method="post" action="#" th:action="@{/auth/signin}" th:object="${login}">
                             <div class="form-group">
                                 <input th:name="|email|" type="email"  class="form-control form-control-lg" id="exampleInputEmail1" placeholder="Correo">
                             </div>

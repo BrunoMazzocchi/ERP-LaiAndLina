@@ -34,7 +34,4 @@ public class ProductClient {
     @ManyToOne
     @JoinColumn(name = "idClient", updatable = false, insertable = false)
     private Client client;
-
-    @OneToMany(mappedBy="productClient")
-    private Set<User> users;
 }
