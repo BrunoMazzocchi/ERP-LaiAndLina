@@ -24,10 +24,6 @@ class AppController {
     private UserService userService;
 
     @Autowired
-    private RoleService roleService;
-    @Autowired
-    private DepartmentService departmentService;
-    @Autowired
     private AuthController authController;
 
 
@@ -83,25 +79,6 @@ class AppController {
         return modelAndView;
     }
 
-    //The following controller will redirect you to the new User form (AuthController Sign up)
-    @RequestMapping(value="/user/newUser", method=RequestMethod.GET)
-    @PreAuthorize("hasRole('ADMIN')")
-    public ModelAndView newOrder(Model model) throws ParseException {
-        ModelAndView modelAndView = new ModelAndView();
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userName = authentication.getName();
-        User user = userService.getByEmail(userName);
-        modelAndView.addObject(user);
-
-        modelAndView.addObject("roles", roleService.findAll());
-        modelAndView.addObject("departments", departmentService.findAll());
-        model.addAttribute("newUser", new User());
-
-        modelAndView.setViewName("user/newUser.html");
-
-        return modelAndView;
-    }
 
 
     //Gets token for authorization purposes.
@@ -115,5 +92,8 @@ class AppController {
         }
         return null;
     }
+
+
+
 
 }

@@ -15,7 +15,7 @@ import java.util.*;
 public class User {
     @Id
     @Column
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column
     private String firstName;

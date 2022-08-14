@@ -220,7 +220,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="card-title">Usuarios</h4>
-                                <a href="/control/user/newUser" ><i class="mdi mdi-plus-box"> </i>Agregar un nuevo usuario</a>
+                                <a href="/user/newUser" ><i class="mdi mdi-plus-box"> </i>Agregar un nuevo usuario</a>
                                 <p class="card-description">
                                 </p>
 
@@ -252,14 +252,14 @@
                                         <tbody>
                                         <tr th:each="userL: ${userList}">
                                             <td th:text="${userL.id}" />
-                                            <td th:text="${userL.name}" />
+                                            <td th:text="${userL.firstName} + ' ' + ${userL.lastName}" />
                                             <td th:text="${userL.department}" />
                                             <td th:text="${userL.email}" />
                                             <td th:text="${userL.phoneNumber}" />
 
 
                                             <td>
-                                                <a th:href="@{'/control/user/editUser=' + ${userL.id}}"><i class="mdi mdi-file-document-box"></i></a>
+                                                <a th:href="@{'/user/editUser=' + ${userL.id}}"><i class="mdi mdi-file-document-box"></i></a>
                                             </td>
                                         </tr>
                                         </tbody>

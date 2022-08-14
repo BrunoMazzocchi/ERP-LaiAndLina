@@ -31,7 +31,6 @@ public class ProductClientController {
         authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
         User user = userService.getByEmail(userName);
-        System.out.println(userName);
         modelAndView.addObject(user);
 
         return modelAndView;
@@ -47,7 +46,6 @@ public class ProductClientController {
         authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
         User user = userService.getByEmail(userName);
-        System.out.println(userName);
         modelAndView.addObject(user);
 
         return modelAndView;

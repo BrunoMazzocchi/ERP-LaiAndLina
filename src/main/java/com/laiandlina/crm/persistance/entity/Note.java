@@ -13,7 +13,7 @@ public class Note {
 
     @Id
     @Column
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "client_seq")
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Integer id;
     private String title;
     private String description;

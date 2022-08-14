@@ -12,7 +12,7 @@ import java.util.*;
 public class ProductClient {
     @Id
     @Column
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private Date startDate;
