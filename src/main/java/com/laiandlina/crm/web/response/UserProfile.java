@@ -9,6 +9,7 @@ import lombok.*;
 public class UserProfile {
     private Integer id;
     private String email;
-    private String name;
+    private String firstName;
+    private String lastName;
     private boolean active;
 }

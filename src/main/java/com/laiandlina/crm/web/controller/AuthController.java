@@ -86,6 +86,7 @@ public class AuthController {
             deviceInfo.setDeviceType("1");
 
 
+
             //Dev test, still waiting to implement user device creation
             UserDevice userDevice = userDeviceService.createUserDevice(deviceInfo);
             RefreshToken refreshToken = refreshTokenService.createRefreshToken();
