@@ -16,8 +16,7 @@ public class ProductClientService {
     public List<VwOrder> findAllActiveOrders(){
         return productClientRepository.getVwActiveOrder();
     }
-    public List<VwOrder>
-    findAllCompletedOrders(){
+    public List<VwOrder> findAllCompletedOrders(){
         return productClientRepository.getVwCompletedOrder();
     }
 }

@@ -243,12 +243,12 @@
                     </thead>
 
                     <tbody>
-                    <tr th:each="clients: ${client}">
-                      <td th:text="${clients.id}" />
-                      <td th:text="${clients.firstName}  + ' ' + ${clients.lastName}" />
-                      <td th:text="${clients.identification}" />
+                    <tr th:each="client: ${clients}">
+                      <td th:text="${client.id}" />
+                      <td th:text="${client.firstName}  + ' ' + ${client.lastName}" />
+                      <td th:text="${client.identification}" />
                       <td>
-                        <a th:href="@{'clients=' + ${clients.id}}"><i class="mdi mdi-file-document-box"></i></a>
+                        <a th:href="@{'clients=' + ${client.id}}"><i class="mdi mdi-file-document-box"></i></a>
                       </td>
                     </tr>
                     </tbody>

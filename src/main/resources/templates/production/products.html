@@ -220,7 +220,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="card-title">Productos</h4>
-                                <a href="/control/newProduct" ><i class="mdi mdi-plus-box"> </i>Agregar un nuevo producto</a>
+                                <a href="/control/product/newProduct" ><i class="mdi mdi-plus-box"> </i>Agregar un nuevo producto</a>
                                 <p class="card-description">
                                 </p>
                                 <div class="table-responsive pt-3">
@@ -249,14 +249,15 @@
                                         </thead>
 
                                         <tbody>
-                                        <tr th:each="products: ${product}">
-                                            <td th:text="${products.id}" />
-                                            <td th:text="${products.name}" />
-                                            <td th:text="${products.description}" />
-                                            <td th:text="${products.basePrice}" />
-                                            <td th:text="${products.creationDate}" />
+                                        <tr th:each="product: ${products}">
+                                            <td th:text="${product.id}" />
+                                            <td th:text="${product.name}" />
+                                            <td th:text="${product.description}" />
+                                            <td th:text="${product.price}" />
+                                            <td th:text="${#dates.format(new java.util.Date(product.creationDate), 'dd/MM/yyyy')}" />
+
                                             <td>
-                                                <a th:href="@{'product=' + ${products.id}}"><i class="mdi mdi-file-document-box"></i></a>
+                                                <a th:href="@{'product=' + ${product.id}}"><i class="mdi mdi-file-document-box"></i></a>
                                             </td>
                                         </tr>
                                         </tbody>

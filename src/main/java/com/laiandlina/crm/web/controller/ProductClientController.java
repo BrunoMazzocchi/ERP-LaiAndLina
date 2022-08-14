@@ -2,6 +2,7 @@ package com.laiandlina.crm.web.controller;
 
 import com.laiandlina.crm.domain.service.*;
 import com.laiandlina.crm.persistance.entity.*;
+import org.hibernate.procedure.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.security.core.*;
 import org.springframework.security.core.context.*;
@@ -11,6 +12,7 @@ import org.springframework.web.servlet.*;
 
 import javax.servlet.http.*;
 import java.text.*;
+import java.util.*;
 
 @RestController
 @RequestMapping("/control/order")
@@ -28,6 +30,7 @@ public class ProductClientController {
 
         modelAndView.setViewName("order/orders.html");
         modelAndView.addObject("order", productClientService.findAllActiveOrders());
+        System.out.println(productClientService.findAllActiveOrders());
         authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
         User user = userService.getByEmail(userName);

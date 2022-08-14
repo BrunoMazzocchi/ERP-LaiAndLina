@@ -6,7 +6,7 @@ import java.sql.Date;
 public interface VwOrder {
      Integer getId();
      Double getBasePrice();
-     Double getFinalPrice();
+     Double getFinal_price();
      Date getStartDate();
      Date getEndDate();
      int getState();
