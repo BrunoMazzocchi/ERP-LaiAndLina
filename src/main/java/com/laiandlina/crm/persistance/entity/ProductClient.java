@@ -34,4 +34,10 @@ public class ProductClient {
     @ManyToOne
     @JoinColumn(name = "idClient", updatable = false, insertable = false)
     private Client client;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_follow_product_client",
+            joinColumns = @JoinColumn(name = "productClientId"),
+            inverseJoinColumns = @JoinColumn(name = "userId"))
+    private Set<User> users = new HashSet<>();
 }

@@ -61,6 +61,8 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "roleId"))
     private Set<Role> roles = new HashSet<>();
 
+
+
     public void activate() {
         this.active = true;
     }

@@ -19,4 +19,5 @@ public interface ProductClientRepository extends JpaRepository<ProductClient, In
      List<VwOrder> getVwCompletedOrder();
 
 
+     ProductClient save(ProductClient productClient);
 }

@@ -13,7 +13,12 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     Boolean existsByEmail(String email);
 
     User getByEmail(String email);
-
-
     List<User> findAll();
+
+    @Query(nativeQuery = true, value = "select user.* from role\n" +
+            "inner join user_roles\n" +
+            "\ton user_roles.role_id = role.id\n" +
+            "    inner join user \n" +
+            "\t\ton user_roles.user_id = user.id where role.id =  ? and user.active = 1;")
+    List<User> findByRoles(int idRol);
 }
