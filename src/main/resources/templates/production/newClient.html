@@ -232,25 +232,25 @@
                 <div class="row ">
                     <div class="col-md-8 grid-margin stretch-card">
                         <div class="card">
-                            <form method="post" action="#" th:action="@{/api/client/saveClientForm}" th:object="${newClient}">
+                            <form method="post" action="#" th:action="@{/control/client/saveClientForm}" th:object="${newClient}">
                                 <div class="card-body">
                                     <h4 class="card-title">Nuevo cliente</h4>
                                     <div class="form-group">
 
                                         <h4 class="card-title">Nombre del cliente</h4>
                                         <div class="form-group">
-                                            <input th:field="*{firstName}" type="text" class="form-control"
+                                            <input th:field="*{firstName}"  required  type="text" class="form-control"
                                                    aria-label="Nombre del cliente">
 
                                         </div>
                                         <h4 class="card-title">Apellido del cliente</h4>
                                         <div class="form-group">
-                                                        <input th:field="*{lastName}" name="lastname" type="text" class="form-control"
+                                                        <input th:field="*{lastName}" required name="lastname" type="text" class="form-control"
                                                                   aria-label="Apellido del cliente"/>
                                         </div>
                                         <h4 class="card-title">Correo del cliente</h4>
                                         <div class="form-group">
-                                                        <input th:field="*{identification}" name="identification" type="email" class="form-control"
+                                                        <input th:field="*{identification}" required name="identification" type="email" class="form-control"
                                                                   aria-label="Correo del cliente"/>
                                         </div>
 

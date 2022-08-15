@@ -91,8 +91,9 @@ public class ProductClientController {
         return modelAndView;
     }
 
+    //This function will create a new order and notify users (ADMIN and userCreator)
     @RequestMapping(value = "/saveOrderForm", method = RequestMethod.POST)
-    public ModelAndView saveOrder(@ModelAttribute("newOrder") NewProductClientForm formOrder,
+    public ModelAndView createOrder(@ModelAttribute("newOrder") NewProductClientForm formOrder,
                                   BindingResult bindingResult,
                                   ModelMap model) {
 
@@ -140,11 +141,6 @@ public class ProductClientController {
                     newProductClient.getEndDate() + "' " +
                     ". Puedes continuar aqui http://localhost:8080/control/order/active");
         });
-
-
-
-
-
         return new ModelAndView("redirect:/control/order/active", model);
     }
 }

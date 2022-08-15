@@ -2,14 +2,19 @@ package com.laiandlina.crm.web.controller;
 
 
 import com.laiandlina.crm.domain.service.*;
+import com.laiandlina.crm.persistance.data.*;
 import com.laiandlina.crm.persistance.entity.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.security.core.*;
 import org.springframework.security.core.context.*;
+import org.springframework.ui.*;
+import org.springframework.validation.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.*;
 
 import javax.servlet.http.*;
+import java.sql.*;
+import java.text.*;
 
 @RestController
 @RequestMapping("/control/product")
@@ -33,6 +38,40 @@ public class ProductController {
         User user = userService.getByEmail(userName);
         modelAndView.addObject(user);
         return modelAndView;
+    }
+
+    @RequestMapping(value="/newProduct", method=RequestMethod.GET)
+    public ModelAndView newProduct(Model model, Authentication authentication) throws ParseException {
+        ModelAndView modelAndView = new ModelAndView();
+        model.addAttribute("newProduct", new Product());
+        modelAndView.setViewName("production/newProduct.html");
+        authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = authentication.getName();
+        User user = userService.getByEmail(userName);
+        System.out.println(userName);
+        modelAndView.addObject(user);
+        return modelAndView;
+    }
+
+    @PostMapping("/saveProductForm")
+    public ModelAndView save(@ModelAttribute("newProduct") NewProductForm productForm,
+                             BindingResult bindingResult,
+                             ModelMap model, Authentication authentication){
+        java.sql.Date timestamp = new Date(System.currentTimeMillis());
+
+        Product product = new Product();
+        product.setName(productForm.getName());
+        product.setDescription(productForm.getDescription());
+        product.setPrice(productForm.getPrice());
+        product.setCreationDate(timestamp);
+
+        authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = authentication.getName();
+        User user = userService.getByEmail(userName);
+        product.setState(1);
+        product.setUserCreator(user.getId());
+        productService.save(product);
+        return new ModelAndView("redirect:/control/product/all", model);
     }
 
 }

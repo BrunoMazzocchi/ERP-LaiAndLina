@@ -232,20 +232,20 @@
                 <div class="row ">
                     <div class="col-md-8 grid-margin stretch-card">
                         <div class="card">
-                            <form method="post" action="#" th:action="@{/api/products/saveProductForm}" th:object="${newProduct}">
+                            <form method="post" action="#" th:action="@{/control/product/saveProductForm}" th:object="${newProduct}">
                                 <div class="card-body">
                                     <h4 class="card-title">Nuevo producto</h4>
                                     <div class="form-group">
                            
                                                     <h4 class="card-title">Nombre del producto</h4>
                                                     <div class="form-group">
-                                                        <input th:field="*{name}" type="text" class="form-control"
+                                                        <input th:field="*{name}"required  type="text" class="form-control"
                                                         aria-label="Nombre del producto">
                                                                                            
                                                     </div>
                                                     <h4 class="card-title">Descripción del producto</h4>
                                                     <div class="form-group">
-                                                        <textarea th:field="*{description}" name="description" type="text" class="form-control"
+                                                        <textarea th:field="*{description}" required name="description" type="text" class="form-control"
                                                         aria-label="Descripción del producto"></textarea>                                                                                      
                                                     </div>
                                                     <div class="form-group">
@@ -254,7 +254,7 @@
                                                             <div class="input-group-prepend">
                                                                 <span class="input-group-text bg-primary text-white">$</span>
                                                             </div>
-                                                            <input th:field="*{basePrice}" type="text" class="form-control"
+                                                            <input required th:field="*{price}" type="text" class="form-control"
                                                                    aria-label="Precio base">
                                                         </div>
                                                     </div>

@@ -241,16 +241,16 @@
                                         <h4 class="card-title">Nombre del usuario</h4>
                                         <div class="form-group">
 
-                                            <input style="margin-bottom: 10px" class="form-control" type="text" th:name="|firstName|"
+                                            <input style="margin-bottom: 10px" required class="form-control" type="text" th:name="|firstName|"
                                                    placeholder="Nombre"/>
 
-                                            <input class="form-control" type="text" th:name="|lastName|"
+                                            <input class="form-control"  required type="text" th:name="|lastName|"
                                                    placeholder="Apellido"/>
 
                                         </div>
                                         <h4 class="card-title">Email del usuario</h4>
                                         <div class="form-group">
-                                            <input class="form-control" type="text" th:name="|email|"/>
+                                            <input class="form-control" required type="text" th:name="|email|"/>
 
                                         </div>
 
@@ -258,7 +258,7 @@
                                         <h4 class="card-title">Rol del usuario</h4>
                                         <div class="form-group">
                                             <select id="role" class="js-example-basic-single w-100" th:name="|role|">
-                                                <option value="0">Selecciona...</option>
+                                                <option required value="0">Selecciona...</option>
                                                 <option th:each="role: ${roles}" th:value="${role.id}"
                                                         th:text="${role.roleName}"></option>
                                             </select>
@@ -266,7 +266,7 @@
 
                                         <h4 class="card-title">Departamento del usuario</h4>
                                         <div class="form-group">
-                                            <select id="department" class="js-example-basic-single w-100" th:name="|department|">
+                                            <select required id="department" class="js-example-basic-single w-100" th:name="|department|">
                                                 <option value="0">Selecciona...</option>
                                                 <option th:each="department: ${departments}" th:value="${department.id}"
                                                         th:text="${department.departmentName}"></option>
@@ -276,7 +276,7 @@
 
                                         <h4 class="card-title">Número del usuario</h4>
                                         <div class="form-group">
-                                            <input class="form-control" type="text" th:name="|phoneNumber|"/>
+                                            <input  required class="form-control" type="text" th:name="|phoneNumber|"/>
 
 
                                         </div>

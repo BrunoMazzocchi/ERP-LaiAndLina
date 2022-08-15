@@ -99,13 +99,9 @@ public class AuthController {
             Cookie jwtRefreshToken = new Cookie("RefreshToken", refreshToken.getToken());
 
             jwtTokenCookie.setMaxAge(36000);
-            jwtTokenCookie.setSecure(true);
-            jwtTokenCookie.setHttpOnly(true);
             jwtTokenCookie.setPath("/");
 
             jwtRefreshToken.setMaxAge(36000);
-            jwtRefreshToken.setSecure(true);
-            jwtRefreshToken.setHttpOnly(true);
             jwtRefreshToken.setPath("/");
 
 
@@ -259,5 +255,4 @@ public class AuthController {
                 .toString();
         return generatedString;
     }
-
 }
