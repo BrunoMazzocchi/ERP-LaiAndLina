@@ -20,4 +20,8 @@ public class UserService
      public User getByEmail(String email){
          return userRepository.getByEmail(email);
      }
+
+     public void updateUserProfilePicture(String img, int idUser){
+          userRepository.saveUserPicture(img, idUser);
+     }
 }

@@ -236,14 +236,16 @@
                                                     <p class="mb-0" th:text="'Usuario desde: ' + ${#dates.format(new java.util.Date(user.getCreationDate()), 'dd/MM/yyyy')}"></p>
                                                 </li>
                                                 <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                                                    <form action="/">
-                                                        <input type="file" id="myFile" name="filename" placeholder="Seleccionar archivo">
-                                                        <button type="submit" class="btn btn-danger btn-icon-text">
-                                                            <i class="ti-upload btn-icon-prepend"></i>
-                                                            Cambiar foto
-                                                        </button>
+                                                    <form th:action="@{/user/changePicture}" th:object="${uploadPictureForm}" method="post" enctype="multipart/form-data">
+                                                            <input required type="file" id="myPicture"  accept="image/jpg"  th:name="|myPicture|" placeholder="Seleccionar archivo">
+                                                            <input hidden th:value="${user.getId()}" th:name="|idUser|" readonly >
+                                                            <button type="submit" class="btn btn-danger btn-icon-text">
+                                                                <i class="ti-upload btn-icon-prepend"></i>
+                                                                Cambiar foto
+                                                            </button>
                                                     </form>
                                                 </li>
+
                                             </ul>
                                         </div>
                                     </div>

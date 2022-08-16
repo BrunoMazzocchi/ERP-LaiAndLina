@@ -4,6 +4,7 @@ package com.laiandlina.crm.persistance.repository;
 import com.laiandlina.crm.persistance.entity.*;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.*;
+import org.springframework.transaction.annotation.*;
 
 import java.util.*;
 
@@ -21,4 +22,9 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             "    inner join user \n" +
             "\t\ton user_roles.user_id = user.id where role.id =  ? and user.active = 1;")
     List<User> findByRoles(int idRol);
+
+    @Modifying
+    @Transactional
+    @Query(value = "update user u set u.url_photo = ?  where u.id = ?", nativeQuery = true)
+    void saveUserPicture(String firstname, Integer userId);
 }
