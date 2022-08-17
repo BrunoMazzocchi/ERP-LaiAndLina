@@ -24,4 +24,7 @@ public class ProductClientService {
     public ProductClient save(ProductClient productClient){
         return productClientRepository.save(productClient);
     }
+    public VwOrder findById(int idOrder){
+        return productClientRepository.findById(idOrder);
+    }
 }

@@ -34,7 +34,7 @@ public class ProductClientController {
     @Autowired
     private ProductService productService;
     @Autowired
-    private RoleRepository roleRepository;
+    private ProductClientRepository productClientRepository;
     @Autowired
     private EmailService javaMailSender;
 
@@ -137,10 +137,71 @@ public class ProductClientController {
         users.forEach(userForEmail -> {
             javaMailSender.sendEmail(userForEmail.getEmail(), "Se ha generado una nueva orden",
                     "Se ha generado una" +
-                    " orden nueva. Numero de ordeN: '" + newProductClient.getId() + ", Entrega programada para: " +
+                    " orden nueva. Numero de orden: '" + newProductClient.getId() + ", Entrega programada para: " +
                     newProductClient.getEndDate() + "' " +
                     ". Puedes continuar aqui http://localhost:8080/control/order/active");
         });
         return new ModelAndView("redirect:/control/order/active", model);
+    }
+
+
+    @RequestMapping(value="/order={orderId}", method=RequestMethod.GET)
+    public ModelAndView getOrder(@PathVariable("orderId") int orderId, Authentication authentication) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("order/order.html");
+        modelAndView.addObject("productClient", productClientService.findById(orderId));
+        modelAndView.addObject("order", productClientRepository.findById(orderId));
+        authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = authentication.getName();
+        User user = userService.getByEmail(userName);
+        System.out.println(userName);
+        modelAndView.addObject(user);
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/editOrderForm", method = RequestMethod.POST)
+    public ModelAndView editOrder(@ModelAttribute("currentOrder") NewProductClientForm formOrder,
+                                  BindingResult bindingResult,
+                                  ModelMap model) {
+
+        if(bindingResult.hasErrors()){
+            model.addAttribute("index.html");
+        }
+        ProductClient productClient = new ProductClient();
+        productClient.setId(formOrder.getId());
+        productClient.setIdProduct(formOrder.getIdProduct());
+        productClient.setIdClient(formOrder.getIdClient());
+        productClient.setEndDate(formOrder.getEndDate());
+        productClient.setState(formOrder.getState());
+        productClient.setStartDate(formOrder.getStartDate());
+        productClient.setFinalPrice(formOrder.getFinalPrice());
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = authentication.getName();
+        User user = userService.getByEmail(userName);
+
+        Set<String> strUsers = Collections.singleton(formOrder.getUser());
+
+
+        Set<User> users = new HashSet<>();
+        List<User> usersByRole = userRepository.findByRoles(1);
+
+        usersByRole.forEach(userInRole -> {
+            User userForFollowUp = userInRole;
+            users.add(userForFollowUp);
+        });
+
+        users.add(user);
+        productClient.setUsers(users);
+
+        ProductClient editedProductClient = productClientService.save(productClient);
+
+        users.forEach(userForEmail -> {
+            javaMailSender.sendEmail(userForEmail.getEmail(), "Se ha generado una nueva orden",
+                    "Se ha editado una" +
+                            " orden existente. Numero de orden: " + editedProductClient.getId() + ", Puedes ver mas " +
+                            "informacion aqui http://localhost:8080/control/order/order="+editedProductClient.getId()+"");
+        });
+        return new ModelAndView("redirect:/control/orders", model);
     }
 }

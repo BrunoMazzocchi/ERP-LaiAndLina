@@ -104,10 +104,11 @@ public class UserController {
     public ModelAndView changeProfilePicture(   @RequestParam("myPicture") MultipartFile multipartFile,
                                                 @RequestParam("idUser") int idUser) throws IOException {
         String fileName = "user-" + idUser + ".jpg";
-        String uploadDir = "src/main/resources/static/images/upload/";
+        String uploadDir = "C:/profilePictures";
 
+        String fileToBeSave = "http://localhost:8000/images/" + fileName;
         saveFile(uploadDir, fileName, multipartFile);
-        userService.updateUserProfilePicture(fileName, idUser);
+        userService.updateUserProfilePicture(fileToBeSave, idUser);
         return new ModelAndView("redirect:/user/myProfile");
 
     }

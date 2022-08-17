@@ -9,7 +9,6 @@ import java.util.*;
 
 @Repository
 public interface ProductClientRepository extends JpaRepository<ProductClient, Integer> {
-     ProductClient findById(int orderId);
 
      @Query(nativeQuery = true, value = "SELECT * FROM vw_active_order ORDER BY start_date")
      List<VwOrder> getVwActiveOrder();
@@ -20,4 +19,6 @@ public interface ProductClientRepository extends JpaRepository<ProductClient, In
 
 
      ProductClient save(ProductClient productClient);
+
+     VwOrder findById(int orderId);
 }
