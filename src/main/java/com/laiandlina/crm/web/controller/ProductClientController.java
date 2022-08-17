@@ -37,7 +37,8 @@ public class ProductClientController {
     private ProductClientRepository productClientRepository;
     @Autowired
     private EmailService javaMailSender;
-
+    @Autowired
+    private NoteRepository noteRepository;
 
 
     //Mapping to list all active orders
@@ -150,7 +151,8 @@ public class ProductClientController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("order/order.html");
         modelAndView.addObject("productClient", productClientService.findById(orderId));
-        modelAndView.addObject("order", productClientRepository.findById(orderId));
+        modelAndView.addObject("notes", noteRepository.findNoteByProductClient(orderId));
+        modelAndView.addObject("order", productClientRepository.findOrderById(orderId));
         authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
         User user = userService.getByEmail(userName);
@@ -197,11 +199,11 @@ public class ProductClientController {
         ProductClient editedProductClient = productClientService.save(productClient);
 
         users.forEach(userForEmail -> {
-            javaMailSender.sendEmail(userForEmail.getEmail(), "Se ha generado una nueva orden",
+            javaMailSender.sendEmail(userForEmail.getEmail(), "Se ha editado una orden",
                     "Se ha editado una" +
                             " orden existente. Numero de orden: " + editedProductClient.getId() + ", Puedes ver mas " +
                             "informacion aqui http://localhost:8080/control/order/order="+editedProductClient.getId()+"");
         });
-        return new ModelAndView("redirect:/control/orders", model);
+        return new ModelAndView("redirect:/control/order/active", model);
     }
 }

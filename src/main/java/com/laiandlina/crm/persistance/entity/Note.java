@@ -3,6 +3,7 @@ package com.laiandlina.crm.persistance.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.sql.*;
 
 @Entity
 @Data
@@ -17,7 +18,7 @@ public class Note {
     private Integer id;
     private String title;
     private String description;
-
+    private Date postedOn;
 
         @ManyToOne
         @JoinColumn(name = "idUser")

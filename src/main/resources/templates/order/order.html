@@ -307,7 +307,7 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text bg-primary text-white">$</span>
                                             </div>
-                                            <input th:name="|finalPrice|" th:value="${order.getPrice()}" type="text"
+                                            <input th:name="|finalPrice|" th:value="${order.getFinal_price()}" type="text"
                                                    class="form-control"
                                                    aria-label="Amount (to the nearest dollar)">
                                         </div>
@@ -336,21 +336,30 @@
                         </div>
                     </div>
                     <div class="col-md-4 grid-margin stretch-card">
-                            <form  method="post" action="#" th:action="@{/api/notes/saveNoteForm}" >
+                            <form  method="post" action="#" th:action="@{/note/saveNoteForm}" >
 
                                 <div style="max-height: inherit">
-                                    <div class="card" style="width: inherit;">
+                                    <div class="card" style="width: inherit; margin-bottom: 20px">
                                         <div class="card-body " style="height: 40rem; overflow:auto">
                                             <h4 class="card-title"> Notas </h4>
                                             <div class="card " style="margin-bottom: 10px;" th:each="note: ${notes}">
                                                 <div class="card-body" style="max-height: 40%; width: 20rem">
-                                                    <h5 class="card-title">Descripción</h5>
+                                                    <h4 th:text="${note.getTitle()}" class="card-title"></h4>
                                                     <p class="card-text" aria-required="true"
-                                                       th:text="${note.description}"></p>
+                                                       th:text="${note.getDescription()}"></p>
                                                 </div>
                                                 <ul class="list-group list-group-flush">
-                                                    <li class="list-group-item"
-                                                        th:text="'Publicado por: ' + ${user.getName()}"></li>
+                                                    <li class="list-group-item">
+
+
+                                                    <img th:src="${note.getUserPhotoURL()}"
+                                                         class="img-xs rounded-circle"
+                                                         style="width: 30px; height: 30px;" />
+
+                                                        <p th:text="'Publicado por: ' + ${note.getUserName}">
+
+                                                        </p>
+                                                    </li>
                                                 </ul>
                                             </div>
 
@@ -361,8 +370,11 @@
                                     </div>
 
                                     <div class="input-group mb-3">
-                                        <input hidden th:name="|idUser|" th:value="${user.getId()}"/>
-                                        <input hidden th:name="|idProductClient|" th:value="${productClient.id}"/>
+                                        <input hidden th:name="|user|" th:value="${user.getId()}"/>
+                                        <input hidden th:name="|productClient|" th:value="${productClient.getId()}"/>
+                                        <input type="text" class="form-control" style="height: 3rem"
+                                               th:name="|title|" placeholder="Ingresar titulo"
+                                               aria-label="Ingresar titulo" aria-describedby="basic-addon2">
                                         <input type="text" class="form-control" style="height: 3rem"
                                                th:name="|description|" placeholder="Ingresar descripción"
                                                aria-label="Ingresar descripción" aria-describedby="basic-addon2">

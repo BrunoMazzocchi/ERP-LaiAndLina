@@ -20,5 +20,8 @@ public interface ProductClientRepository extends JpaRepository<ProductClient, In
 
      ProductClient save(ProductClient productClient);
 
-     VwOrder findById(int orderId);
+     ProductClient findById(int order);
+
+     @Query(nativeQuery = true, value = "SELECT * FROM vw_active_order where id = ?")
+     VwOrder findOrderById(int orderId);
 }
