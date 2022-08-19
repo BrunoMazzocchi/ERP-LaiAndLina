@@ -16,5 +16,5 @@ public class SignUpUserRequest
     private String password;
     private String role;
     private String department;
-    private String phoneNumber;
+    private int phoneNumber;
 }

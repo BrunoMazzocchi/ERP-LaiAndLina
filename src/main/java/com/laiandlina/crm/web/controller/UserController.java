@@ -45,16 +45,14 @@ public class UserController {
     }
 
     @GetMapping("/myProfile")
-    @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView getMeUser() {
         ModelAndView modelAndView = new ModelAndView();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
         User user = userService.getByEmail(userName);
-
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         modelAndView.setViewName("user/profile.html");
-        modelAndView.addObject("CurrentUser", getCurrentUser(userPrincipal));
+        modelAndView.addObject("CurrentUser", userRepository.getUserDepartmentByEmail(userName));
 
         modelAndView.addObject(user);
 
@@ -83,6 +81,7 @@ public class UserController {
 
     //The following controller will redirect you to all user list
     @RequestMapping(value = "/users", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ADMIN')")
     public ModelAndView getAllUsers(Authentication authentication){
         ModelAndView modelAndView = new ModelAndView();
         authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -93,7 +92,10 @@ public class UserController {
         modelAndView.setViewName("user/users.html");
         modelAndView.addObject("CurrentUser", getCurrentUser(userPrincipal));
 
-        modelAndView.addObject("userList", userRepository.findAll());
+        modelAndView.addObject("userList", userRepository.findAllUser());
+
+        Optional<VwUserDepartment> user1 = userRepository.findAllUser().stream().findFirst();
+        System.out.println(user1);
         modelAndView.addObject(user);
 
         return modelAndView;

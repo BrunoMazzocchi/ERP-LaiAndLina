@@ -258,25 +258,28 @@
                                         <h4 class="card-title">Rol del usuario</h4>
                                         <div class="form-group">
                                             <select id="role" class="js-example-basic-single w-100" th:name="|role|">
-                                                <option required value="0">Selecciona...</option>
-                                                <option th:each="role: ${roles}" th:value="${role.id}"
-                                                        th:text="${role.roleName}"></option>
+                                                <option required >Selecciona...</option>
+                                                <option required >Admin</option>
+                                                <option required >Usuario</option>
+                                                <option required >Almacen</option>
+                                                <option required >Dev</option>
                                             </select>
                                         </div>
 
                                         <h4 class="card-title">Departamento del usuario</h4>
                                         <div class="form-group">
                                             <select required id="department" class="js-example-basic-single w-100" th:name="|department|">
-                                                <option value="0">Selecciona...</option>
-                                                <option th:each="department: ${departments}" th:value="${department.id}"
-                                                        th:text="${department.departmentName}"></option>
+                                                <option required>Selecciona...</option>
+                                                <option required>Administracion</option>
+                                                <option required>IT</option>
+
                                             </select>
                                         </div>
 
 
                                         <h4 class="card-title">Número del usuario</h4>
                                         <div class="form-group">
-                                            <input  required class="form-control" type="text" th:name="|phoneNumber|"/>
+                                            <input  required class="form-control" type="number" th:name="|phoneNumber|"/>
 
 
                                         </div>

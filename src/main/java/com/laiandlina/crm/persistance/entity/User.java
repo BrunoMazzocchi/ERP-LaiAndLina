@@ -43,8 +43,6 @@ public class User {
     private Integer state;
     @Column
     private String phoneNumber;
-    @Column
-    private String department;
     @Column(nullable = false)
     private Boolean active;
 

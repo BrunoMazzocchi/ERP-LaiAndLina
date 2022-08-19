@@ -1,4 +1,4 @@
-package com.laiandlina.crm.persistance.data;
+package com.laiandlina.crm.web.config;
 
 import javax.servlet.annotation.*;
 import javax.servlet.http.*;

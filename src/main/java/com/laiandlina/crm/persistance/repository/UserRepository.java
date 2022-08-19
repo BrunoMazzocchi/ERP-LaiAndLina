@@ -1,6 +1,7 @@
 package com.laiandlina.crm.persistance.repository;
 
 
+import com.laiandlina.crm.persistance.data.*;
 import com.laiandlina.crm.persistance.entity.*;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.*;
@@ -14,7 +15,12 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     Boolean existsByEmail(String email);
 
     User getByEmail(String email);
-    List<User> findAll();
+
+    @Query(nativeQuery = true, value = "select * from vw_user_department where email = ?")
+    VwUserDepartment getUserDepartmentByEmail(String email);
+
+    @Query(nativeQuery = true, value = "select * from vw_user_department")
+    List<VwUserDepartment> findAllUser();
 
     @Query(nativeQuery = true, value = "select user.* from role\n" +
             "inner join user_roles\n" +

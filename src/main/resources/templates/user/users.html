@@ -244,6 +244,9 @@
                                                 Número
                                             </th>
                                             <th>
+                                                Estado
+                                            </th>
+                                            <th>
                                                 Acciones
                                             </th>
                                         </tr>
@@ -251,11 +254,12 @@
 
                                         <tbody>
                                         <tr th:each="userL: ${userList}">
-                                            <td th:text="${userL.id}" />
-                                            <td th:text="${userL.firstName} + ' ' + ${userL.lastName}" />
-                                            <td th:text="${userL.department}" />
-                                            <td th:text="${userL.email}" />
-                                            <td th:text="${userL.phoneNumber}" />
+                                            <td th:text="${userL.getId()}" />
+                                            <td th:text="${userL.getFirstName()} + ' ' + ${userL.getLastName()}" />
+                                            <td th:text="${userL.getDepartmentName()}" />
+                                            <td th:text="${userL.getEmail()}" />
+                                            <td th:text="${userL.getPhoneNumber()}" />
+                                            <td th:text="${userL.getState()}" />
 
 
                                             <td>

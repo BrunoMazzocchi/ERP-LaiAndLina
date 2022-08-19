@@ -54,14 +54,16 @@ public class AuthController {
     @Autowired
     private ApplicationEventPublisher applicationEventPublisher;
 
+    @Autowired
+    private  DepartmentRepository departmentRepository;
 
     @Autowired
     private EmailService javaMailSender;
 
     @PostMapping("/signin")
     //cambiar a atribute o body
-    public ModelAndView authenticateUser(@ModelAttribute("login") LoginForm loginRequest, HttpServletResponse response, ModelMap model,
-                                         HttpServletRequest request) {
+    public ModelAndView authenticateUser(@ModelAttribute("login") LoginForm loginRequest, HttpServletResponse response,
+                                         ModelMap model) {
 
         User user = userRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User not found."));
@@ -132,19 +134,20 @@ public class AuthController {
 
         String password = randomString();
         user.setPassword(encoder.encode(password));
-        System.out.println("Sign up user get password: " + user.getPassword());
-        System.out.println("Sign password: " + password);
-
-
         Set<String> strRoles = Collections.singleton(signUpRequest.getRole());
         Set<Role> roles = new HashSet<>();
+
+
+        Set<String> strDepartments = Collections.singleton(signUpRequest.getDepartment());
+        Set<Department> departments = new HashSet<>();
+
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
         User userCreator = userService.getByEmail(userName);
-        user.setState(0);
+        user.setState(1);
         user.setUserCreator(userCreator.getId());
-
+        user.setPhoneNumber(String.valueOf(signUpRequest.getPhoneNumber()));
         java.sql.Date timestamp = new Date(System.currentTimeMillis());
         user.setCreationDate(timestamp);
 
@@ -152,24 +155,24 @@ public class AuthController {
 
         strRoles.forEach(role -> {
             switch (role) {
-                case "ROLE_ADMIN":
+                case "Admin":
                     Role adminRole = roleRepository.findByRoleName(RoleName.ROLE_ADMIN)
                             .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not found."));
                     roles.add(adminRole);
                     break;
-                case "ROLE_DEV":
+                case "Dev":
                     Role devRole = roleRepository.findByRoleName(RoleName.ROLE_DEV)
                             .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not found."));
                     roles.add(devRole);
 
                     break;
-                case "ROLE_GROCER":
+                case "Almacen":
                     Role grocerRole = roleRepository.findByRoleName(RoleName.ROLE_GROCER)
                             .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not found."));
                     roles.add(grocerRole);
 
                     break;
-                case "ROLE_USER":
+                case "Usuario":
                 default:
                     Role userRole = roleRepository.findByRoleName(RoleName.ROLE_USER)
                             .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not found."));
@@ -177,11 +180,29 @@ public class AuthController {
             }
         });
 
+        strDepartments.forEach(department -> {
+            switch (department) {
+                case "Administracion":
+                    Department departmentAdmin = departmentRepository.findByDepartmentName(DepartmentName.DEPARTMENT_ADMIN)
+                            .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User department not found."));
+                    departments.add(departmentAdmin);
+                    break;
+                case "IT":
+                    Department departmentIT = departmentRepository.findByDepartmentName(DepartmentName.DEPARTMENT_IT)
+                            .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User department not found."));
+                    departments.add(departmentIT);
+                    break;
+            }
+        });
+
+
         user.setRoles(roles);
+        user.setDepartments(departments);
         user.activate();
         userRepository.save(user);
 
-        javaMailSender.sendEmail(user.getEmail(), "Usuario nuevo", "Se te ha invitado: '" + user.getEmail() + ", Password: " + password + "' . Puedes continuar aqui http://localhost:8080/login");
+        javaMailSender.sendEmail(user.getEmail(), "Usuario nuevo", "Se te ha invitado: '" + user.getEmail()
+                + ", Password: " + password + "' . Puedes continuar aqui http://localhost:8080/login");
         return new ModelAndView("redirect:/index", model);
     }
 
