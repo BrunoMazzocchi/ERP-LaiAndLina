@@ -95,5 +95,9 @@ class AppController {
 
 
 
+    @RequestMapping(value="", method=RequestMethod.GET)
+    public String redirect() throws ParseException {
+        return "redirect:/index";
 
+    }
 }
