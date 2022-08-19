@@ -13,6 +13,7 @@ import org.springframework.web.servlet.*;
 
 import javax.servlet.http.*;
 import java.text.*;
+import java.util.*;
 
 @RestController
 @RequestMapping("/control/client")
@@ -39,17 +40,50 @@ public class ClientController {
     }
 
     @RequestMapping(value="/newClient", method=RequestMethod.GET)
-    public ModelAndView newProduct(Model model, Authentication authentication) throws ParseException {
+    public ModelAndView newClient(Model model, Authentication authentication) throws ParseException {
         ModelAndView modelAndView = new ModelAndView();
         model.addAttribute("newClient", new Client());
         modelAndView.setViewName("production/newClient.html");
         authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
         User user = userService.getByEmail(userName);
-        System.out.println(userName);
         modelAndView.addObject(user);
         return modelAndView;
     }
+
+    @RequestMapping(value="/client={clientId}", method=RequestMethod.GET)
+    public ModelAndView editClient(Model model, Authentication authentication,
+                                   @PathVariable("clientId") int clientId)throws ParseException {
+
+        Client client = clientService.findClientById(clientId).stream().findFirst().orElse(null);
+
+        ModelAndView modelAndView = new ModelAndView();
+        model.addAttribute("client", client);
+        modelAndView.setViewName("production/client.html");
+        authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = authentication.getName();
+        User user = userService.getByEmail(userName);
+        modelAndView.addObject(user);
+
+
+
+        return modelAndView;
+    }
+
+    @PostMapping("/editClientForm")
+    public ModelAndView editClientForm(@ModelAttribute("currentClient") Client client,
+                                  BindingResult bindingResult,
+                                  ModelMap model) {
+
+        if(bindingResult.hasErrors()){
+            model.addAttribute("index.html");
+        }
+        clientService.save(client);
+
+
+        return new ModelAndView("redirect:/control/client/all", model);
+    }
+
 
     @PostMapping("/saveClientForm")
     public ModelAndView save(@ModelAttribute("newClient") NewClientForm clientForm,
@@ -66,4 +100,5 @@ public class ClientController {
         clientService.save(client);
         return new ModelAndView("redirect:/control/client/all", model);
     }
+
 }

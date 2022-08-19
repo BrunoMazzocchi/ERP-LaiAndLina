@@ -52,7 +52,37 @@ public class ProductController {
         modelAndView.addObject(user);
         return modelAndView;
     }
+    @RequestMapping(value="/product={productId}", method=RequestMethod.GET)
+    public ModelAndView editProduct(Model model, Authentication authentication,
+                                   @PathVariable("productId") int productId)throws ParseException {
 
+        Product product = productService.findById(productId).stream().findFirst().orElse(null);
+
+        ModelAndView modelAndView = new ModelAndView();
+        model.addAttribute("product", product);
+        modelAndView.setViewName("production/product.html");
+        authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = authentication.getName();
+        User user = userService.getByEmail(userName);
+        modelAndView.addObject(user);
+
+
+
+        return modelAndView;
+    }
+
+    @PostMapping("/editProductForm")
+    public ModelAndView editProductForm(@ModelAttribute("currentProduct") Product product,
+                                  BindingResult bindingResult,
+                                  ModelMap model) {
+        if(bindingResult.hasErrors()){
+            model.addAttribute("index.html");
+        }
+        productService.save(product);
+
+
+        return new ModelAndView("redirect:/control/product/all", model);
+    }
     @PostMapping("/saveProductForm")
     public ModelAndView save(@ModelAttribute("newProduct") NewProductForm productForm,
                              BindingResult bindingResult,

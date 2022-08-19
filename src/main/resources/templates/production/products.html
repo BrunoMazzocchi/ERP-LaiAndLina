@@ -233,7 +233,7 @@
                                             <th>
                                                 Nombre
                                             </th>
-                                            <th style="width: 150px;">
+                                            <th style="max-width: 20px;">
                                                 Descripción
                                             </th>
                                             <th>
@@ -251,10 +251,16 @@
                                         <tbody>
                                         <tr th:each="product: ${products}">
                                             <td th:text="${product.id}" />
-                                            <td th:text="${product.name}" />
-                                            <td th:text="${product.description}" />
+                                            <td style="width:100px"
+                                                     th:text="${product.name}">
+                                            </td>
+                                            <td style="width:200px"
+                                                     th:text="${product.description}">
+                                            </td>
+
+
                                             <td th:text="${product.price}" />
-                                            <td th:text="${#dates.format(new java.util.Date(product.creationDate), 'dd/MM/yyyy')}" />
+                                            <td th:text="${product.creationDate}" />
 
                                             <td>
                                                 <a th:href="@{'product=' + ${product.id}}"><i class="mdi mdi-file-document-box"></i></a>

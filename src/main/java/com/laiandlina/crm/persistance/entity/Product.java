@@ -3,7 +3,7 @@ package com.laiandlina.crm.persistance.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.*;
+import java.sql.*;
 
 @Data
 @Entity

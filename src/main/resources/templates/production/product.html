@@ -5,7 +5,7 @@
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Pedido</title>
+    <title>Producto</title>
     <!-- plugins:css -->
     <link rel="stylesheet" href="../../static/vendors/feather/feather.css">
     <link rel="stylesheet" href="../../static/vendors/mdi/css/materialdesignicons.min.css">
@@ -30,7 +30,8 @@
 <div class="container-scroller">
 
     <!-- partial:partials/_navbar.html -->
-    <div th:replace="fragments/nav.html :: nav"></div>    <!-- partial main -->
+    <div th:replace="fragments/nav.html :: nav"></div>
+    <!-- partial main -->
 
 
     <div class="container-fluid page-body-wrapper">
@@ -226,219 +227,103 @@
 
         <div th:replace="fragments/sidebar.html :: sidebar"></div>
 
-        <div class="main-panel">
-            <div class="content-wrapper">
-                <div class="row">
+        <div class="main-panel ">
+            <div class="content-wrapper overflow-auto">
+                <div class="row ">
                     <div class="col-md-8 grid-margin stretch-card">
                         <div class="card">
-                            <form method="post" action="#" th:action="@{/control/order/editOrderForm}"
-                                  th:object="${currentOrder}">
+                            <form method="post" action="#" th:action="@{/control/product/editProductForm}"
+                                  th:object="${currentProduct}">
                                 <div class="card-body">
-                                    <h4 class="card-title">Orden a trabajar</h4>
-                                    <input hidden th:name="|id|" th:value="${productClient.id}"/>
-                                    <p class="card-description" th:text="'Número de orden:' + ${order.getId()}"></p>
-                                    <div class="form-group">
-                                        <label>Datos del cliente</label>
-                                        <div class="input-group">
-                                            <input hidden th:name="|idClient|" th:value="${productClient.idClient}"/>
-                                            <input readonly type="text" class="form-control" placeholder="Cliente"
-                                                   th:value="${order.getClient()}"
-                                                   aria-label="Cliente"/>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Nombre del producto</label>
-                                        <div class="input-group">
-                                            <input hidden th:name="|idProduct|" th:value="${productClient.idProduct}"/>
-                                            <input readonly type="text" class="form-control" placeholder="Producto"
-                                                   th:value="${order.getProduct()}"
-
-                                                   aria-label="Producto">
-                                        </div>
-                                    </div>
-
+                                    <h4 class="card-title">Editar producto</h4>
                                     <div class="form-group">
 
-                                        <label>Etapa de producción</label>
-                                        <div class="form-check form-check-primary ">
-                                            <label class="form-check-label">
-                                                <input th:name="|state|" th:value="${4}" onclick="onlyOne(this)"
-                                                       type="checkbox" th:checked="${order.getState()} == 4"
-                                                       class="form-check-input">
-                                                Completado
-                                            </label>
-                                        </div>
-                                        <div class="form-check form-check-success">
-                                            <label class="form-check-label">
-                                                <input th:name="|state|" th:value="${1}" onclick="onlyOne(this)"
-                                                       type="checkbox" th:checked="${order.getState()} == 1"
-                                                       class="form-check-input">
-                                                En bodega
-                                            </label>
-                                        </div>
-                                        <div class="form-check form-check-info">
-                                            <label class="form-check-label">
-                                                <input th:name="|state|" th:value="${2}" onclick="onlyOne(this)"
-                                                       type="checkbox" th:checked="${order.getState()} == 2"
-                                                       class="form-check-input">
-                                                En progreso
-                                            </label>
-                                        </div>
-                                        <div class="form-check form-check-danger">
-                                            <label class="form-check-label">
-                                                <input th:name="|state|" th:value="${3}" onclick="onlyOne(this)"
-                                                       type="checkbox" th:checked="${order.getState()} == 3"
-                                                       class="form-check-input">
-                                                En taller
-                                            </label>
-                                        </div>
-                                        <div class="form-check form-check-warning">
-                                            <label class="form-check-label">
-                                                <input onclick="onlyOne(this)" type="checkbox" th:name="|state|"
-                                                       th:value="${0}" th:checked="${order.getState()} == 0"
-                                                       class="form-check-input">
-                                                Comenzando
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Invertido por el momento</label>
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text bg-primary text-white">$</span>
-                                            </div>
-                                            <input th:name="|finalPrice|" th:value="${order.getFinal_price()}" type="text"
+                                        <h4 class="card-title">Nombre del producto</h4>
+                                        <div class="form-group">
+                                            <input hidden th:value="${product.id}" th:name="|id|">
+                                            <input hidden th:value="${product.state}" th:name="|state|">
+                                            <input hidden th:value="${product.creationDate}" th:name="|creationDate|">
+                                            <input hidden th:value="${product.userCreator}" th:name="|userCreator|">
+                                            <input hidden th:value="${user.getId()}" th:name="|userMod|">
+                                            <input  th:value="${product.name}"  th:name="|name|" required type="text"
                                                    class="form-control"
-                                                   aria-label="Amount (to the nearest dollar)">
+                                                   aria-label="Nombre del producto">
+
                                         </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group row">
+                                        <h4 class="card-title">Descripción del producto</h4>
+                                        <div class="form-group">
+                                                        <textarea th:name="|description|"
+                                                                  th:text="${product.description}" required
+                                                                  name="description" type="text" class="form-control"
+                                                                  aria-label="Descripción del producto"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Precio base</label>
                                             <div class="input-group">
-                                                <input hidden th:name="|startDate|" name="startDate" id="startDate"
-                                                       type="date" th:field="${productClient.startDate}"/>
-                                                <input th:name="|endDate|" name="endDate" id="endDate"
-                                                       th:field="${productClient.endDate}" type="date"
-                                                       class="form-control">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text bg-primary text-white">$</span>
+                                                </div>
+                                                <input required th:name="|price|" th:value="${product.price}"
+                                                       type="text" class="form-control"
+                                                       aria-label="Precio base">
                                             </div>
                                         </div>
+
                                     </div>
+
                                     <div class="form-group">
-                                        <button type="submit" class="btn btn-danger">Confirmar cambios</button>
-                                        <button onClick="location.href='orders'" type="button" class="btn btn-success">
+                                        <button type="submit" class="btn btn-danger">
+                                            Editar producto
+                                        </button>
+                                        <button onClick="location.href='products'" type="button"
+                                                class="btn btn-success">
                                             Regresar
                                         </button>
 
                                     </div>
                                 </div>
-
                             </form>
                         </div>
                     </div>
-                    <div class="col-md-4 grid-margin stretch-card">
-                            <form  method="post" action="#" th:action="@{/note/saveNoteForm}" >
-
-                                <div style="max-height: inherit">
-                                    <div class="card" style="width: inherit; margin-bottom: 20px">
-                                        <div class="card-body " style="height: 40rem; overflow:auto">
-                                            <h4 class="card-title"> Notas </h4>
-                                            <div class="card " style="margin-bottom: 10px;" th:each="note: ${notes}">
-                                                <div class="card-body" style="max-height: 40%; width: 20rem">
-                                                    <h4  th:text="${note.getTitle()}" class="card-title"></h4>
-                                                    <p class="card-text" aria-required="true"
-                                                       th:text="${note.getDescription()}"></p>
-                                                </div>
-                                                <ul class="list-group list-group-flush">
-                                                    <li class="list-group-item">
 
 
-                                                    <img th:src="${note.getUserPhotoURL()}"
-                                                         class="img-xs rounded-circle"
-                                                         style="width: 30px; height: 30px;" />
-
-                                                        <p th:text="'Publicado por: ' + ${note.getUserName}">
-
-                                                        </p>
-                                                    </li>
-                                                </ul>
-                                            </div>
-
-
-                                        </div>
-
-
-                                    </div>
-
-                                    <div class="input-group mb-3">
-                                        <input hidden th:name="|user|" th:value="${user.getId()}"/>
-                                        <input hidden th:name="|productClient|" th:value="${productClient.getId()}"/>
-                                        <input required type="text" class="form-control" style="height: 3rem"
-                                               th:name="|title|" placeholder="Ingresar titulo"
-                                               aria-label="Ingresar titulo" aria-describedby="basic-addon2">
-                                        <input required type="text" class="form-control" style="height: 3rem"
-                                               th:name="|description|" placeholder="Ingresar descripción"
-                                               aria-label="Ingresar descripción" aria-describedby="basic-addon2">
-                                        <button type="submit" class="btn btn-primary btn-icon-text">
-                                            <i class="ti-file btn-icon-prepend"></i>
-                                            Agregar
-                                        </button>
-                                    </div>
-                                </div>
-
-                            </form>
-                        </div>
-                    <div th:replace="fragments/footer.html :: footer"></div>
-
-                    <!-- main-panel ends               <div th:replace="fragments/footer.html :: footer"></div>
--->
                 </div>
-                <!-- page-body-wrapper ends -->
+                <!-- main-panel ends -->
             </div>
-            <!-- main-panel ends -->
+            <div th:replace="fragments/footer.html :: footer"></div>
+
+            <!-- page-body-wrapper ends -->
         </div>
 
+        <!-- main-panel ends -->
+
+        <!-- main-panel ends -->
     </div>
-        <!-- page-body-wrapper ends -->
-    </div>
-    <!-- container-scroller -->
+    <!-- page-body-wrapper ends -->
+</div>
+<!-- container-scroller -->
 
-    <!-- plugins:js -->
-    <script src="vendors/js/vendor.bundle.base.js"></script>
-    <!-- endinject -->
-    <!-- Plugin js for this page -->
-    <script src="vendors/chart.js/Chart.min.js"></script>
-    <script src="vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
-    <script src="vendors/progressbar.js/progressbar.min.js"></script>
+<!-- plugins:js -->
+<script src="vendors/js/vendor.bundle.base.js"></script>
+<!-- endinject -->
+<!-- Plugin js for this page -->
+<script src="vendors/chart.js/Chart.min.js"></script>
+<script src="vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+<script src="vendors/progressbar.js/progressbar.min.js"></script>
 
-    <!-- End plugin js for this page -->
-    <!-- inject:js -->
-    <script src="js/off-canvas.js"></script>
-    <script src="js/hoverable-collapse.js"></script>
-    <script src="js/template.js"></script>
-    <script src="js/settings.js"></script>
-    <script src="js/todolist.js"></script>
-    <!-- endinject -->
-    <!-- Custom js for this page-->
-    <script src="js/jquery.cookie.js" type="text/javascript"></script>
-    <script src="js/dashboard.js"></script>
-    <script src="js/Chart.roundedBarCharts.js"></script>
-    <!-- End custom js for this page-->
-    <script>
-        function onlyOne(checkbox) {
-
-            var checkboxes = document.getElementsByName('state')
-            checkboxes.forEach((item) => {
-                if (item !== checkbox) item.checked = false
-            })
-
-        }
-
-        $("#noteForm").submit(function(e) {
-            e.preventDefault();
-        });
-    </script>
-</body>
-
+<!-- End plugin js for this page -->
+<!-- inject:js -->
+<script src="js/off-canvas.js"></script>
+<script src="js/hoverable-collapse.js"></script>
+<script src="js/template.js"></script>
+<script src="js/settings.js"></script>
+<script src="js/todolist.js"></script>
+<!-- endinject -->
+<!-- Custom js for this page-->
+<script src="js/jquery.cookie.js" type="text/javascript"></script>
+<script src="js/dashboard.js"></script>
+<script src="js/Chart.roundedBarCharts.js"></script>
+<!-- End custom js for this page-->
 <!-- plugins:js -->
 <script src="../../static/vendors/js/vendor.bundle.base.js"></script>
 <!-- endinject -->
@@ -460,6 +345,20 @@
 <script src="../../static/js/dashboard.js"></script>
 <script src="../../static/js/Chart.roundedBarCharts.js"></script>
 <!-- End custom js for this page-->
+
+
+</script>
+
+<script>
+    function onlyOne(checkbox) {
+
+        var checkboxes = document.getElementsByName('state')
+        checkboxes.forEach((item) => {
+            if (item !== checkbox) item.checked = false
+        })
+
+    }
+</script>
 </body>
 </html>
 
