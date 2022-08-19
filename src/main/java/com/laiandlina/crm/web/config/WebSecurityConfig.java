@@ -64,17 +64,26 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) {
         web.ignoring().antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources/**", "/configuration/**",
-                "/swagger-ui.html", "/webjars/**");
+                "/swagger-ui.html", "/webjars/**", "/auth/signin");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
         http.cors()
                 .and()
                 .csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(jwtEntryPoint)
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .formLogin().loginPage("/login") // Using form based login instead of Basic Authentication
+                .usernameParameter("email")
+                .passwordParameter("password")
+                .successForwardUrl("/index")
+                .failureForwardUrl("/login")
+                .loginProcessingUrl("/auth/signin")
+                .permitAll()
                 .and()
                 .authorizeRequests()
                 .antMatchers(
@@ -96,12 +105,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.html",
                         "/**/*.css",
                         "/**/*.js").permitAll()
-                .antMatchers("/**/**").permitAll()
-                .anyRequest().authenticated()
-                .and().formLogin()
-                .failureForwardUrl("/login")
-                .permitAll().and().exceptionHandling().accessDeniedPage("/control/forbiddenAccess/**")
-                .accessDeniedPage("/control/forbiddenAccess/**");
+                        .anyRequest().authenticated();
+
 
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
@@ -116,7 +121,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(Arrays.asList("http://localhost:8080"));
+        config.setAllowedOrigins(Arrays.asList("http://localhost:8000"));
         config.setAllowedMethods(Collections.singletonList("*"));
         config.setAllowedHeaders(Collections.singletonList("*"));
         source.registerCorsConfiguration("/**", config);

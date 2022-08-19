@@ -13,6 +13,7 @@ import org.springframework.web.filter.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import java.io.*;
+import java.net.*;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -29,8 +30,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-
-
         try {
 
 
@@ -44,9 +43,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
-
-
-
+            } else {
 
             }
         } catch (Exception e) {
@@ -59,25 +56,32 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     //This process will review cookies after sign in. If cookies with auth name are present, it will check.
 
     private String getJwt(HttpServletRequest request) {
-        String authHeader = "";
+        String authHeader = "Not found";
 
-            if (getCookieByName(request, "Authorization").getName().equals("Authorization")) {
-                return authHeader = getCookieByName(request, "Authorization").getValue();
-            } else if(getCookieByName(request, "Authorization")  == null) {
-                return authHeader = "";
+        try{
+            if(getCookieByName(request, "Authorization") != null){
+                authHeader = getCookieByName(request, "Authorization").getValue();
+                return authHeader;
+            }
+        } catch (Exception exception){
+            logger.error("Exception -> " + exception);
         }
 
-        return authHeader;
+        return null;
     }
 
     protected Cookie getCookieByName(HttpServletRequest request, String name) {
-        if (request.getCookies() == null) {
-            return null;
-        }
-        for (int i = 0; i < request.getCookies().length; i++) {
-            if (request.getCookies()[i].getName().equals(name)) {
-                return request.getCookies()[i];
+        try {
+            if (request.getCookies() == null) {
+                return null;
             }
+            for (int i = 0; i < request.getCookies().length; i++) {
+                if (request.getCookies()[i].getName().equals(name)) {
+                    return request.getCookies()[i];
+                }
+            }
+        } catch (Exception exception){
+            logger.error("Exception -> " + exception);
         }
         return null;
     }
