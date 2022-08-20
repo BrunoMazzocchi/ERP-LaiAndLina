@@ -27,15 +27,3 @@ function getParams(){
     }
 }
 $(document).ready(getParams());
-
-
-function confirmCancellation(id){
-    notie.confirm({
-        text: 'Seguro que quieres eliminarlo??',
-        cancelCallback: () => notie.alert({ type: 3, text: 'Gracias por confirmar.' }),
-        submitCallback: () => {
-            notie.alert({ type: 1, text: 'Eliminando...' })
-
-        }
-    })
-}

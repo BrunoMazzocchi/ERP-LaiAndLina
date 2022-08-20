@@ -4,6 +4,7 @@ import com.laiandlina.crm.domain.service.*;
 import com.laiandlina.crm.persistance.data.*;
 import com.laiandlina.crm.persistance.entity.*;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.security.access.prepost.*;
 import org.springframework.security.core.*;
 import org.springframework.security.core.context.*;
 import org.springframework.ui.*;
@@ -110,6 +111,20 @@ public class ClientController {
         } catch (Exception error){
             System.out.println("Error on client save: " + error);
             return new ModelAndView("redirect:/control/client/all?msg=2", model);
+        }
+    }
+
+    @PostMapping("/deleteClient={idClient}")
+    public ModelAndView deleteClient(@PathVariable("idClient") int clientId){
+        try{
+
+            Client client = clientService.findClientById(clientId).stream().findFirst().orElse(null);
+            client.setState(3);
+            clientService.save(client);
+            return new ModelAndView("redirect:/control/client/all?msg=5");
+        } catch (Exception error){
+            System.out.println("Error on client save: " + error);
+            return new ModelAndView("redirect:/control/client/all?msg=6");
         }
     }
 

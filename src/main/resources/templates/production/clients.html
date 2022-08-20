@@ -240,6 +240,9 @@
                         Identificación
                       </th>
                       <th>
+                        Estado
+                      </th>
+                      <th>
                         Acciones
                       </th>
                     </tr>
@@ -250,12 +253,19 @@
                       <td th:text="${client.id}" />
                       <td th:text="${client.firstName}  + ' ' + ${client.lastName}" />
                       <td th:text="${client.identification}" />
+                      <td th:switch="${client.state}">
+                        <label th:case="0" class="badge badge-success">Activo</label>
+                        <label th:case="1" class="badge badge-success">Activo</label>
+                        <label th:case="2" class="badge badge-success">Activo</label>
+                        <label th:case="3" class="badge badge-danger">Inactivo</label>
+                      </td>
                       <td>
                         <a th:href="@{'client=' + ${client.id}}"><i class="mdi mdi-file-document-box"></i></a>
-
-                        <a th:attr="onclick=${'confirmCancellation('+client.id+')'}">
+                        <form id="deleteForm" name="deleteForm">
+                        <a action th:attr="onclick=${'confirmCancellation('+client.id+')'}">
                           <i class="mdi mdi-delete"  ></i>
                         </a>
+                        </form>
                       </td>
                     </tr>
                     </tbody>
@@ -329,7 +339,24 @@
 
 
 <!-- End custom notie for this page-->
-<script src="../../static/vendors/notie.js/notieImpl.js"> </script>
+<script src="../../static/vendors/notie.js/notieImpl.js">
+</script>
+
+<script>
+  function confirmCancellation(id){
+    notie.confirm({
+      text: 'Seguro que quieres eliminarlo??',
+      cancelCallback: () => notie.alert({ type: 3, text: 'Gracias por confirmar.' }),
+      submitCallback: () => {
+        notie.alert({ type: 1, text: 'Eliminando...' })
+
+        document.getElementById('deleteForm').action = "/control/client/deleteClient=" + id;
+        document.getElementById('deleteForm').method = "post";
+        document.getElementById('deleteForm').submit();
+      }
+    })
+  }
+</script>
 
 </body>
 
