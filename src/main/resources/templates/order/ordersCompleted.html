@@ -23,6 +23,8 @@
   <!-- endinject -->
 
   <link rel="shortcut icon" href="../../static/images/favicon.png" />
+  <link rel="stylesheet" href="../../static/vendors/notie.js/dist/notie.css" />
+  <script src="../../static/vendors/notie.js/dist/notie.js"></script>
 </head>
 
 
@@ -265,6 +267,9 @@
                       </td>
                       <td>
                         <a th:href="@{'order=' + ${orders.id}}"><i class="mdi mdi-file-document-box"></i></a>
+                        <a th:attr="onclick=${'confirmCancellation('+orders.id+')'}">
+                          <i class="mdi mdi-delete"  ></i>
+                        </a>
                       </td>
                     </tr>
                     </tbody>
@@ -334,6 +339,8 @@
 <script src="../../static/js/dashboard.js"></script>
 <script src="../../static/js/Chart.roundedBarCharts.js"></script>
 <!-- End custom js for this page-->
+<script src="../../static/vendors/notie.js/notieImpl.js"> </script>
+
 </body>
 </html>
 

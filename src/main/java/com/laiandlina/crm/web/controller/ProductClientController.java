@@ -177,7 +177,7 @@ public class ProductClientController {
         productClient.setState(formOrder.getState());
         productClient.setStartDate(formOrder.getStartDate());
         productClient.setFinalPrice(formOrder.getFinalPrice());
-
+        productClient.setState(2);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
         User user = userService.getByEmail(userName);
