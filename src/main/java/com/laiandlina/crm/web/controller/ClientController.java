@@ -4,6 +4,7 @@ import com.laiandlina.crm.domain.service.*;
 import com.laiandlina.crm.persistance.data.*;
 import com.laiandlina.crm.persistance.entity.*;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.security.access.prepost.*;
 import org.springframework.security.core.*;
 import org.springframework.security.core.context.*;
 import org.springframework.ui.*;
@@ -28,60 +29,70 @@ public class ClientController {
     //Mapping to list all client
     @GetMapping(value = "/all")
     public ModelAndView getAllClient(HttpServletRequest request, Authentication authentication) {
-        ModelAndView modelAndView = new ModelAndView();
-
-        modelAndView.setViewName("production/clients.html");
-        modelAndView.addObject("clients", clientService.findAll());
-        authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userName = authentication.getName();
-        User user = userService.getByEmail(userName);
-        modelAndView.addObject(user);
-        return modelAndView;
+        try{
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.setViewName("production/clients.html");
+            modelAndView.addObject("clients", clientService.findAll());
+            authentication = SecurityContextHolder.getContext().getAuthentication();
+            String userName = authentication.getName();
+            User user = userService.getByEmail(userName);
+            modelAndView.addObject(user);
+            return modelAndView;
+        } catch (Exception error){
+            System.out.println("Error redirecting to all client: " + error);
+            return new ModelAndView("redirect:/index");
+        }
     }
 
     @RequestMapping(value="/newClient", method=RequestMethod.GET)
-    public ModelAndView newClient(Model model, Authentication authentication) throws ParseException {
-        ModelAndView modelAndView = new ModelAndView();
-        model.addAttribute("newClient", new Client());
-        modelAndView.setViewName("production/newClient.html");
-        authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userName = authentication.getName();
-        User user = userService.getByEmail(userName);
-        modelAndView.addObject(user);
-        return modelAndView;
+    public ModelAndView newClient(Model model, Authentication authentication) {
+        try{
+            ModelAndView modelAndView = new ModelAndView();
+            model.addAttribute("newClient", new Client());
+            modelAndView.setViewName("production/newClient.html");
+            authentication = SecurityContextHolder.getContext().getAuthentication();
+            String userName = authentication.getName();
+            User user = userService.getByEmail(userName);
+            modelAndView.addObject(user);
+            return modelAndView;
+        } catch (Exception error){
+            System.out.println("Error redirecting to save client: " + error);
+            return new ModelAndView("redirect:/index");
+        }
     }
 
     @RequestMapping(value="/client={clientId}", method=RequestMethod.GET)
     public ModelAndView editClient(Model model, Authentication authentication,
-                                   @PathVariable("clientId") int clientId)throws ParseException {
+                                   @PathVariable("clientId") int clientId) {
+        try{
+            Client client = clientService.findClientById(clientId).stream().findFirst().orElse(null);
+            ModelAndView modelAndView = new ModelAndView();
+            model.addAttribute("client", client);
+            modelAndView.setViewName("production/client.html");
+            authentication = SecurityContextHolder.getContext().getAuthentication();
+            String userName = authentication.getName();
+            User user = userService.getByEmail(userName);
+            modelAndView.addObject(user);
+            return modelAndView;
+        } catch (Exception error){
+            System.out.println("Error redirecting to edit client: " + error);
+            return new ModelAndView("redirect:/index");
+        }
 
-        Client client = clientService.findClientById(clientId).stream().findFirst().orElse(null);
-
-        ModelAndView modelAndView = new ModelAndView();
-        model.addAttribute("client", client);
-        modelAndView.setViewName("production/client.html");
-        authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userName = authentication.getName();
-        User user = userService.getByEmail(userName);
-        modelAndView.addObject(user);
-
-
-
-        return modelAndView;
     }
 
     @PostMapping("/editClientForm")
     public ModelAndView editClientForm(@ModelAttribute("currentClient") Client client,
                                   BindingResult bindingResult,
                                   ModelMap model) {
-
-        if(bindingResult.hasErrors()){
-            model.addAttribute("index.html");
+        try{
+            client.setState(2);
+            clientService.save(client);
+            return new ModelAndView("redirect:/control/client/all?msg=3", model);
+        } catch (Exception error){
+            System.out.println("Error on client edit: " + error);
+            return new ModelAndView("redirect:/control/client/all?msg=4", model);
         }
-        clientService.save(client);
-
-
-        return new ModelAndView("redirect:/control/client/all", model);
     }
 
 
@@ -89,16 +100,32 @@ public class ClientController {
     public ModelAndView save(@ModelAttribute("newClient") NewClientForm clientForm,
                              BindingResult bindingResult,
                              ModelMap model){
+        try{
+            Client client = new Client();
+            client.setFirstName(clientForm.getFirstName());
+            client.setLastName(clientForm.getLastName());
+            client.setIdentification(clientForm.getIdentification());
+            client.setState(1);
+            clientService.save(client);
+            return new ModelAndView("redirect:/control/client/all?msg=1", model);
+        } catch (Exception error){
+            System.out.println("Error on client save: " + error);
+            return new ModelAndView("redirect:/control/client/all?msg=2", model);
+        }
+    }
 
+    @PostMapping("/deleteClient={idClient}")
+    public ModelAndView deleteClient(@PathVariable("idClient") int clientId){
+        try{
 
-
-        Client client = new Client();
-        client.setFirstName(clientForm.getFirstName());
-        client.setLastName(clientForm.getLastName());
-        client.setIdentification(clientForm.getIdentification());
-
-        clientService.save(client);
-        return new ModelAndView("redirect:/control/client/all", model);
+            Client client = clientService.findClientById(clientId).stream().findFirst().orElse(null);
+            client.setState(3);
+            clientService.save(client);
+            return new ModelAndView("redirect:/control/client/all?msg=5");
+        } catch (Exception error){
+            System.out.println("Error on client save: " + error);
+            return new ModelAndView("redirect:/control/client/all?msg=6");
+        }
     }
 
 }

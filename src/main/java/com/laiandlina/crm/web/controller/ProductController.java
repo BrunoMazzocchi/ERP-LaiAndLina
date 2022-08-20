@@ -78,6 +78,7 @@ public class ProductController {
         if(bindingResult.hasErrors()){
             model.addAttribute("index.html");
         }
+        product.setState(2);
         productService.save(product);
 
 

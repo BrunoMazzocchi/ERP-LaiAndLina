@@ -16,4 +16,6 @@ public class Client {
     private String lastName;
     @Column
     private String identification;
+    @Column
+    private Integer state;
 }
