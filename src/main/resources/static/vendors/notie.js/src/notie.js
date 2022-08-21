@@ -245,8 +245,8 @@ export const force = ({
 
 export const confirm = ({
   text,
-  submitText = 'Yes',
-  cancelText = 'Cancel',
+  submitText = 'Si',
+  cancelText = 'No, cancelar.',
   submitCallback,
   cancelCallback,
   position = options.positions.confirm || position.top

@@ -362,9 +362,9 @@ var force = exports.force = function force(_ref2, callbackArg) {
 var confirm = exports.confirm = function confirm(_ref3, submitCallbackArg, cancelCallbackArg) {
   var text = _ref3.text,
       _ref3$submitText = _ref3.submitText,
-      submitText = _ref3$submitText === undefined ? 'Yes' : _ref3$submitText,
+      submitText = _ref3$submitText === undefined ? 'Si' : _ref3$submitText,
       _ref3$cancelText = _ref3.cancelText,
-      cancelText = _ref3$cancelText === undefined ? 'Cancel' : _ref3$cancelText,
+      cancelText = _ref3$cancelText === undefined ? 'No, cancelar.' : _ref3$cancelText,
       submitCallback = _ref3.submitCallback,
       cancelCallback = _ref3.cancelCallback,
       _ref3$position = _ref3.position,
