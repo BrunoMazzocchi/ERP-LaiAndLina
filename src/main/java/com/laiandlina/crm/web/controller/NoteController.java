@@ -6,6 +6,7 @@ import com.laiandlina.crm.persistance.entity.*;
 import com.laiandlina.crm.persistance.repository.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.security.core.*;
+import org.springframework.security.core.annotation.*;
 import org.springframework.security.core.context.*;
 import org.springframework.ui.*;
 import org.springframework.validation.*;
@@ -28,7 +29,8 @@ public class NoteController {
     private UserRepository userRepository;
 
     @RequestMapping(value="/note={productClientId}", method=RequestMethod.GET)
-    public List<VwNote> getNotesByProductClient(@PathVariable ("productClientId") int productClientId){
+    public List<VwNote> getNotesByProductClient(@PathVariable ("productClientId") int productClientId,
+                                                @AuthenticationPrincipal UserPrincipal userPrincipal){
         return noteRepository.findNoteByProductClient(productClientId);
     }
 

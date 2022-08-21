@@ -244,7 +244,7 @@
                                             <input hidden th:value="${product.state}" th:name="|state|">
                                             <input hidden th:value="${product.creationDate}" th:name="|creationDate|">
                                             <input hidden th:value="${product.userCreator}" th:name="|userCreator|">
-                                            <input hidden th:value="${user.getId()}" th:name="|userMod|">
+                                            <input hidden th:value="${userPrincipal.getId()}" th:name="|userMod|">
                                             <input  th:value="${product.name}"  th:name="|name|" required type="text"
                                                    class="form-control"
                                                    aria-label="Nombre del producto">

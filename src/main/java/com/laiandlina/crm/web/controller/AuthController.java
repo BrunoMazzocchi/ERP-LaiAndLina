@@ -14,6 +14,7 @@ import org.springframework.http.*;
 import org.springframework.security.access.prepost.*;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.*;
+import org.springframework.security.core.annotation.*;
 import org.springframework.security.core.context.*;
 import org.springframework.security.crypto.password.*;
 import org.springframework.ui.*;
@@ -122,7 +123,8 @@ public class AuthController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/signup")
-    public ModelAndView registerUser(@ModelAttribute("signUpRequest") SignUpUserRequest signUpRequest, ModelMap model) {
+    public ModelAndView registerUser(@ModelAttribute("signUpRequest") SignUpUserRequest signUpRequest, ModelMap model,
+                                     @AuthenticationPrincipal UserPrincipal userPrincipal) {
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
 
             return new ModelAndView("redirect:newUser", model);
@@ -143,12 +145,8 @@ public class AuthController {
         Set<String> strDepartments = Collections.singleton(signUpRequest.getDepartment());
         Set<Department> departments = new HashSet<>();
 
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userName = authentication.getName();
-        User userCreator = userService.getByEmail(userName);
         user.setState(1);
-        user.setUserCreator(userCreator.getId());
+        user.setUserCreator(userPrincipal.getId());
         user.setPhoneNumber(String.valueOf(signUpRequest.getPhoneNumber()));
         java.sql.Date timestamp = new Date(System.currentTimeMillis());
         user.setCreationDate(timestamp);
@@ -239,8 +237,6 @@ public class AuthController {
                                                   HttpServletRequest req, HttpServletResponse resp) {
 
         String deviceId = logOutRequest.getDeviceInfo().getDeviceId();
-
-        System.out.println("DeviceID: " + deviceId);
         UserDevice userDevice = userDeviceService.findByUserId(currentUser.getId())
                 .filter(device -> device.getDeviceId().equals(deviceId))
                 .orElseThrow(() -> new UserLogoutException(logOutRequest.getDeviceInfo().getDeviceId(), "Invalid device Id supplied. No matching device found for the given user "));

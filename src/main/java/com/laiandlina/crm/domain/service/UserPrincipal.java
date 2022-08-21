@@ -19,6 +19,8 @@ public class UserPrincipal  implements  UserDetails{
     private String firstName;
     private String lastName;
     private String email;
+    private String urlPhoto;
+    private String phoneNumber;
 
     @JsonIgnore
     private String password;
@@ -28,7 +30,8 @@ public class UserPrincipal  implements  UserDetails{
     private Map<String, Object> attributes;
 
     public UserPrincipal(int id, String firstName, String lastName,
-                         String email, String password,
+                         String email, String password, String urlPhoto,
+                         String phoneNumber,
                          Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.firstName = firstName;
@@ -36,6 +39,8 @@ public class UserPrincipal  implements  UserDetails{
         this.email = email;
         this.password = password;
         this.authorities = authorities;
+        this.urlPhoto = urlPhoto;
+        this.phoneNumber = phoneNumber;
     }
 
     public static UserPrincipal build(User user) {
@@ -49,6 +54,8 @@ public class UserPrincipal  implements  UserDetails{
                 user.getLastName(),
                 user.getEmail(),
                 user.getPassword(),
+                user.getUrlPhoto(),
+                user.getPhoneNumber(),
                 authorities
         );
     }
@@ -68,6 +75,12 @@ public class UserPrincipal  implements  UserDetails{
         return email;
     }
 
+    public  String getUrlPhoto(){
+        return urlPhoto;
+    }
+    public String getPhoneNumber(){
+        return phoneNumber;
+    }
     @Override
     public String getUsername() {
         return email;

@@ -17,7 +17,7 @@
   <div class="navbar-menu-wrapper d-flex align-items-top"> 
     <ul class="navbar-nav">
       <li class="nav-item font-weight-semibold d-none d-lg-block ms-0">
-        <h1 class="welcome-text">Hola de nuevo, <span class="text-black fw-bold" th:text="${user.getFirstName()}"></span></h1>
+        <h1 class="welcome-text">Hola de nuevo, <span class="text-black fw-bold" th:text="${userPrincipal.getFirstName()}"></span></h1>
         <h3 class="welcome-sub-text">Esto es lo ultimo que se ha trabajado</h3>
       </li>
     </ul>
@@ -149,12 +149,12 @@
       </li>
       <li class="nav-item dropdown d-none d-lg-block user-dropdown">
         <a class="nav-link" id="UserDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-          <img class="img-xs rounded-circle" style="width: 40px; height: 40px;" th:src="${user.getUrlPhoto()}" alt="Profile image"> </a>
+          <img class="img-xs rounded-circle" style="width: 40px; height: 40px;" th:src="${userPrincipal.getUrlPhoto()}" alt="Profile image"> </a>
         <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
           <div class="dropdown-header text-center">
-            <img class="img-md rounded-circle" style="width: 150px; height: 150px;" th:src="${user.getUrlPhoto()}" alt="Profile image">
-            <p class="mb-1 mt-3 font-weight-semibold" th:text="${user.getFirstName()}"></p>
-            <p class="fw-light text-muted mb-0" th:text="${user.getEmail()}"></p>
+            <img class="img-md rounded-circle" style="width: 150px; height: 150px;" th:src="${userPrincipal.getUrlPhoto()}" alt="Profile image">
+            <p class="mb-1 mt-3 font-weight-semibold" th:text="${userPrincipal.getFirstName()}"></p>
+            <p class="fw-light text-muted mb-0" th:text="${userPrincipal.getEmail()}"></p>
           </div>
           <a th:href="@{/user/myProfile}" class="dropdown-item"><i class="dropdown-item-icon mdi mdi-account-outline text-primary me-2"></i> Mi perfil <span class="badge badge-pill badge-danger"></span></a>
           <a class="dropdown-item"><i class="dropdown-item-icon mdi mdi-message-text-outline text-primary me-2"></i> Mensajes</a>

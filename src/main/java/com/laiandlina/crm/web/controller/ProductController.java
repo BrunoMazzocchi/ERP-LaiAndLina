@@ -6,6 +6,7 @@ import com.laiandlina.crm.persistance.data.*;
 import com.laiandlina.crm.persistance.entity.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.security.core.*;
+import org.springframework.security.core.annotation.*;
 import org.springframework.security.core.context.*;
 import org.springframework.ui.*;
 import org.springframework.validation.*;
@@ -28,15 +29,13 @@ public class ProductController {
 
     //Mapping to list all products
     @GetMapping(value = "/all")
-    public ModelAndView getAllProducts(HttpServletRequest request, Authentication authentication) {
+    public ModelAndView getAllProducts(HttpServletRequest request,
+                                       @AuthenticationPrincipal UserPrincipal userPrincipal) {
         ModelAndView modelAndView = new ModelAndView();
         try{
             modelAndView.setViewName("production/products.html");
             modelAndView.addObject("products", productService.findAll());
-            authentication = SecurityContextHolder.getContext().getAuthentication();
-            String userName = authentication.getName();
-            User user = userService.getByEmail(userName);
-            modelAndView.addObject(user);
+            modelAndView.addObject(userPrincipal);
             return modelAndView;
         } catch (Exception error){
             System.out.println("Error on redirect to all product: " + error);
@@ -45,16 +44,13 @@ public class ProductController {
     }
 
     @RequestMapping(value="/newProduct", method=RequestMethod.GET)
-    public ModelAndView newProduct(Model model, Authentication authentication) throws ParseException {
+    public ModelAndView newProduct(Model model,
+                                   @AuthenticationPrincipal UserPrincipal userPrincipal) throws ParseException {
         try {
             ModelAndView modelAndView = new ModelAndView();
             model.addAttribute("newProduct", new Product());
             modelAndView.setViewName("production/newProduct.html");
-            authentication = SecurityContextHolder.getContext().getAuthentication();
-            String userName = authentication.getName();
-            User user = userService.getByEmail(userName);
-            System.out.println(userName);
-            modelAndView.addObject(user);
+            modelAndView.addObject(userPrincipal);
             return modelAndView;
         } catch (Exception error){
             System.out.println("Error on redirect to save product: " + error);
@@ -64,18 +60,14 @@ public class ProductController {
 
 
     @RequestMapping(value="/product={productId}", method=RequestMethod.GET)
-    public ModelAndView editProduct(Model model, Authentication authentication,
+    public ModelAndView editProduct(Model model, @AuthenticationPrincipal UserPrincipal userPrincipal,
                                    @PathVariable("productId") int productId)throws ParseException {
         try {
             Product product = productService.findById(productId).stream().findFirst().orElse(null);
-
             ModelAndView modelAndView = new ModelAndView();
             model.addAttribute("product", product);
             modelAndView.setViewName("production/product.html");
-            authentication = SecurityContextHolder.getContext().getAuthentication();
-            String userName = authentication.getName();
-            User user = userService.getByEmail(userName);
-            modelAndView.addObject(user);
+            modelAndView.addObject(userPrincipal);
             return modelAndView;
         } catch (Exception error){
             System.out.println("Error on redirect to edit product: " + error);
@@ -85,7 +77,6 @@ public class ProductController {
 
     @PostMapping("/editProductForm")
     public ModelAndView editProductForm(@ModelAttribute("currentProduct") Product product,
-                                  BindingResult bindingResult,
                                   ModelMap model) {
         try{
             product.setState(2);
@@ -99,8 +90,7 @@ public class ProductController {
     }
     @PostMapping("/saveProductForm")
     public ModelAndView save(@ModelAttribute("newProduct") NewProductForm productForm,
-                             BindingResult bindingResult,
-                             ModelMap model, Authentication authentication){
+                             ModelMap model, @AuthenticationPrincipal UserPrincipal userPrincipal){
         try{
             java.sql.Date timestamp = new Date(System.currentTimeMillis());
 
@@ -109,12 +99,8 @@ public class ProductController {
             product.setDescription(productForm.getDescription());
             product.setPrice(productForm.getPrice());
             product.setCreationDate(timestamp);
-
-            authentication = SecurityContextHolder.getContext().getAuthentication();
-            String userName = authentication.getName();
-            User user = userService.getByEmail(userName);
             product.setState(1);
-            product.setUserCreator(user.getId());
+            product.setUserCreator(userPrincipal.getId());
             productService.save(product);
             return new ModelAndView("redirect:/control/product/all?msg=1", model);
         } catch (Exception error){

@@ -1,10 +1,13 @@
 package com.laiandlina.crm.domain.service;
 
+import com.laiandlina.crm.persistance.entity.*;
 import org.slf4j.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.mail.*;
 import org.springframework.mail.javamail.*;
 import org.springframework.stereotype.*;
+
+import java.util.*;
 
 @Service
 public class EmailService{
@@ -22,6 +25,15 @@ static final Logger LOGGER = LoggerFactory.getLogger(EmailService.class);
         message.setSubject(subject);
 
         mailSender.send(message);
+
+    }
+
+    public void sendEmailToUser(String subject, String body, Set<User> users){
+        users.forEach(
+                user -> {
+                    sendEmail(user.getEmail(), subject, body);
+                }
+        );
 
     }
 

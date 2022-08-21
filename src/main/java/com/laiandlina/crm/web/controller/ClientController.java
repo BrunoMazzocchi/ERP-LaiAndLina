@@ -6,6 +6,7 @@ import com.laiandlina.crm.persistance.entity.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.security.access.prepost.*;
 import org.springframework.security.core.*;
+import org.springframework.security.core.annotation.*;
 import org.springframework.security.core.context.*;
 import org.springframework.ui.*;
 import org.springframework.validation.*;
@@ -28,15 +29,13 @@ public class ClientController {
 
     //Mapping to list all client
     @GetMapping(value = "/all")
-    public ModelAndView getAllClient(HttpServletRequest request, Authentication authentication) {
+    public ModelAndView getAllClient(HttpServletRequest request,
+                                     @AuthenticationPrincipal UserPrincipal userPrincipal) {
         try{
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.setViewName("production/clients.html");
             modelAndView.addObject("clients", clientService.findAll());
-            authentication = SecurityContextHolder.getContext().getAuthentication();
-            String userName = authentication.getName();
-            User user = userService.getByEmail(userName);
-            modelAndView.addObject(user);
+            modelAndView.addObject(userPrincipal);
             return modelAndView;
         } catch (Exception error){
             System.out.println("Error redirecting to all client: " + error);
@@ -45,15 +44,12 @@ public class ClientController {
     }
 
     @RequestMapping(value="/newClient", method=RequestMethod.GET)
-    public ModelAndView newClient(Model model, Authentication authentication) {
+    public ModelAndView newClient(Model model, @AuthenticationPrincipal UserPrincipal userPrincipal) {
         try{
             ModelAndView modelAndView = new ModelAndView();
             model.addAttribute("newClient", new Client());
             modelAndView.setViewName("production/newClient.html");
-            authentication = SecurityContextHolder.getContext().getAuthentication();
-            String userName = authentication.getName();
-            User user = userService.getByEmail(userName);
-            modelAndView.addObject(user);
+            modelAndView.addObject(userPrincipal);
             return modelAndView;
         } catch (Exception error){
             System.out.println("Error redirecting to save client: " + error);
@@ -62,17 +58,14 @@ public class ClientController {
     }
 
     @RequestMapping(value="/client={clientId}", method=RequestMethod.GET)
-    public ModelAndView editClient(Model model, Authentication authentication,
+    public ModelAndView editClient(Model model,  @AuthenticationPrincipal UserPrincipal userPrincipal,
                                    @PathVariable("clientId") int clientId) {
         try{
             Client client = clientService.findClientById(clientId).stream().findFirst().orElse(null);
             ModelAndView modelAndView = new ModelAndView();
             model.addAttribute("client", client);
             modelAndView.setViewName("production/client.html");
-            authentication = SecurityContextHolder.getContext().getAuthentication();
-            String userName = authentication.getName();
-            User user = userService.getByEmail(userName);
-            modelAndView.addObject(user);
+            modelAndView.addObject(userPrincipal);
             return modelAndView;
         } catch (Exception error){
             System.out.println("Error redirecting to edit client: " + error);
@@ -98,7 +91,6 @@ public class ClientController {
 
     @PostMapping("/saveClientForm")
     public ModelAndView save(@ModelAttribute("newClient") NewClientForm clientForm,
-                             BindingResult bindingResult,
                              ModelMap model){
         try{
             Client client = new Client();
@@ -117,7 +109,6 @@ public class ClientController {
     @PostMapping("/deleteClient={idClient}")
     public ModelAndView deleteClient(@PathVariable("idClient") int clientId){
         try{
-
             Client client = clientService.findClientById(clientId).stream().findFirst().orElse(null);
             client.setState(3);
             clientService.save(client);

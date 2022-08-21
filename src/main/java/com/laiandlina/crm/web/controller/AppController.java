@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.*;
 import org.springframework.security.access.prepost.*;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.*;
+import org.springframework.security.core.annotation.*;
 import org.springframework.security.core.context.*;
 import org.springframework.stereotype.*;
 import org.springframework.ui.*;
@@ -30,7 +31,7 @@ class AppController {
     //The following controller will redirect you to the new Login form (AuthController Login)
     //If you are currently logged and try to go back, it will redirect you to main dashboard.
     @GetMapping("/login")
-    public String showLoginForm(Model model) {
+    public String showLoginForm() {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
@@ -42,11 +43,8 @@ class AppController {
 
 
     @RequestMapping(value="/signout", method = RequestMethod.GET)
-    public String logoutPage (HttpServletRequest request, HttpServletResponse response) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userName = authentication.getName();
-        User user = userService.getByEmail(userName);
-
+    public String logoutPage (HttpServletRequest request, HttpServletResponse response,
+                              @AuthenticationPrincipal UserPrincipal userPrincipal) {
         //LogOutForm
         LogOutRequest logOutRequest = new LogOutRequest();
         //LogOutToken
@@ -59,23 +57,16 @@ class AppController {
 
 
         //LogOutUserPrincipal
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-
         authController.logoutUser(userPrincipal, logOutRequest, request, response);
         return "redirect:/login";
     }
 
     //After a sucessfull login, you'll get current user and send it to the path.
     @RequestMapping(value="/index", method=RequestMethod.GET)
-    public ModelAndView dashboard(Model model) throws ParseException {
+    public ModelAndView dashboard(@AuthenticationPrincipal UserPrincipal userPrincipal) throws ParseException {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("index");
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userName = authentication.getName();
-        User user = userService.getByEmail(userName);
-        modelAndView.addObject(user);
-
-
+        modelAndView.addObject(userPrincipal);
         return modelAndView;
     }
 
