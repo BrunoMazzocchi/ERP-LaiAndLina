@@ -10,11 +10,11 @@ import java.util.*;
 @Repository
 public interface ProductClientRepository extends JpaRepository<ProductClient, Integer> {
 
-     @Query(nativeQuery = true, value = "SELECT * FROM vw_active_order ORDER BY start_date")
+     @Query(nativeQuery = true, value = "SELECT * FROM vw_active_order where state <> 5 ORDER BY start_date ")
      List<VwOrder> getVwActiveOrder();
 
      //A completed order <Order with a state 4 (completed by user)>
-     @Query(nativeQuery = true, value = "SELECT * FROM vw_completed_order ORDER BY start_date")
+     @Query(nativeQuery = true, value = "SELECT * FROM vw_completed_order where state <> 5 ORDER BY start_date")
      List<VwOrder> getVwCompletedOrder();
 
 

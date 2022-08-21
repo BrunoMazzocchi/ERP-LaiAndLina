@@ -19,7 +19,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query(nativeQuery = true, value = "select * from vw_user_department where email = ?")
     VwUserDepartment getUserDepartmentByEmail(String email);
 
-    @Query(nativeQuery = true, value = "select * from vw_user_department")
+    @Query(nativeQuery = true, value = "select * from vw_user_department where state <> 3")
     List<VwUserDepartment> findAllUser();
 
     @Query(nativeQuery = true, value = "select user.* from role\n" +

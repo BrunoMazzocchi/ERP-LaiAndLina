@@ -11,6 +11,7 @@ import com.laiandlina.crm.web.security.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.*;
 import org.springframework.http.*;
+import org.springframework.security.access.prepost.*;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.*;
 import org.springframework.security.core.context.*;
@@ -119,6 +120,7 @@ public class AuthController {
         return new ModelAndView("redirect:/login", model);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/signup")
     public ModelAndView registerUser(@ModelAttribute("signUpRequest") SignUpUserRequest signUpRequest, ModelMap model) {
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {

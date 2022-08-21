@@ -268,9 +268,11 @@
                                 </td>
                                 <td>
                                   <a th:href="@{'order=' + ${orders.id}}"><i class="mdi mdi-file-document-box"></i></a>
-                                  <a th:attr="onclick=${'confirmCancellation('+orders.id+')'}">
-                                    <i class="mdi mdi-delete"  ></i>
-                                  </a>
+                                  <form id="deleteForm" name="deleteForm">
+                                    <a action th:attr="onclick=${'confirmCancellation('+orders.id+')'}">
+                                      <i class="mdi mdi-delete"  ></i>
+                                    </a>
+                                  </form>
                                 </td>
                               </tr>
                               </tbody>
@@ -341,7 +343,21 @@
   <script src="../../static/js/Chart.roundedBarCharts.js"></script>
   <!-- End custom js for this page-->
     <script src="../../static/vendors/notie.js/notieImpl.js"> </script>
+    <script>
+      function confirmCancellation(id){
+        notie.confirm({
+          text: 'Seguro que quieres eliminarlo??',
+          cancelCallback: () => notie.alert({ type: 3, text: 'Gracias por confirmar.' }),
+          submitCallback: () => {
+            notie.alert({ type: 1, text: 'Eliminando...' })
 
+            document.getElementById('deleteForm').action = "/control/order/deleteProductClient=" + id;
+            document.getElementById('deleteForm').method = "post";
+            document.getElementById('deleteForm').submit();
+          }
+        })
+      }
+    </script>
     </body>
 </html>
 

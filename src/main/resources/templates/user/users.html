@@ -259,7 +259,12 @@
                                             <td th:text="${userL.getDepartmentName()}" />
                                             <td th:text="${userL.getEmail()}" />
                                             <td th:text="${userL.getPhoneNumber()}" />
-                                            <td th:text="${userL.getState()}" />
+                                            <td th:switch="${userL.state}">
+                                                <label th:case="0" class="badge badge-success">Activo</label>
+                                                <label th:case="1" class="badge badge-success">Activo</label>
+                                                <label th:case="2" class="badge badge-success">Activo</label>
+                                                <label th:case="3" class="badge badge-danger">Inactivo</label>
+                                            </td>
 
 
                                             <td>

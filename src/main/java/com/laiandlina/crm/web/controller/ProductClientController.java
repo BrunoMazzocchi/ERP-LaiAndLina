@@ -44,52 +44,67 @@ public class ProductClientController {
     //Mapping to list all active orders
     @GetMapping(value = "/active")
     public ModelAndView getActiveOrder(HttpServletRequest request, Authentication authentication) {
-        ModelAndView modelAndView = new ModelAndView();
+        try {
+            ModelAndView modelAndView = new ModelAndView();
 
-        modelAndView.setViewName("order/orders.html");
-        modelAndView.addObject("order", productClientService.findAllActiveOrders());
-        System.out.println(productClientService.findAllActiveOrders());
-        authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userName = authentication.getName();
-        User user = userService.getByEmail(userName);
-        modelAndView.addObject(user);
+            modelAndView.setViewName("order/orders.html");
+            modelAndView.addObject("order", productClientService.findAllActiveOrders());
+            System.out.println(productClientService.findAllActiveOrders());
+            authentication = SecurityContextHolder.getContext().getAuthentication();
+            String userName = authentication.getName();
+            User user = userService.getByEmail(userName);
+            modelAndView.addObject(user);
 
-        return modelAndView;
+            return modelAndView;
+        } catch (Exception error){
+            System.out.println("Error on redirect to show active orders: " + error);
+            return new ModelAndView("redirect:/index");
+        }
     }
 
     //Mapping to list all completed orders.
     @GetMapping(value = "/completed")
     public ModelAndView getCompletedOrder(HttpServletRequest request, Authentication authentication) {
-        ModelAndView modelAndView = new ModelAndView();
+        try{
+            ModelAndView modelAndView = new ModelAndView();
 
-        modelAndView.setViewName("order/ordersCompleted.html");
-        modelAndView.addObject("order", productClientService.findAllCompletedOrders());
-        authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userName = authentication.getName();
-        User user = userService.getByEmail(userName);
-        modelAndView.addObject(user);
+            modelAndView.setViewName("order/ordersCompleted.html");
+            modelAndView.addObject("order", productClientService.findAllCompletedOrders());
+            authentication = SecurityContextHolder.getContext().getAuthentication();
+            String userName = authentication.getName();
+            User user = userService.getByEmail(userName);
+            modelAndView.addObject(user);
 
-        return modelAndView;
+            return modelAndView;
+        } catch (Exception error){
+            System.out.println("Error on redirect to show completed orders: " + error);
+            return new ModelAndView("redirect:/index");
+        }
     }
 
     //Mapping to create a new order form.
     @GetMapping(value = "/newOrder")
     public ModelAndView newOrder(Model model, Authentication authentication) throws ParseException {
-        ModelAndView modelAndView = new ModelAndView();
-        ProductClient productClient = new ProductClient();
+        try{
+            ModelAndView modelAndView = new ModelAndView();
+            ProductClient productClient = new ProductClient();
 
-        authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userName = authentication.getName();
-        User user = userService.getByEmail(userName);
-        modelAndView.addObject(user);
+            authentication = SecurityContextHolder.getContext().getAuthentication();
+            String userName = authentication.getName();
+            User user = userService.getByEmail(userName);
+            modelAndView.addObject(user);
 
-        modelAndView.addObject("client", clientService.findAll());
-        modelAndView.addObject("product", productService.findAll());
-        model.addAttribute("newOrder", new ProductClient());
+            modelAndView.addObject("client", clientService.findAll());
+            modelAndView.addObject("product", productService.findAll());
+            model.addAttribute("newOrder", new ProductClient());
 
-        modelAndView.setViewName("order/newOrder.html");
+            modelAndView.setViewName("order/newOrder.html");
 
-        return modelAndView;
+            return modelAndView;
+        } catch (Exception error){
+            System.out.println("Error on redirect to create order: " + error);
+            return new ModelAndView("redirect:/control/order/active");
+        }
     }
 
     //This function will create a new order and notify users (ADMIN and userCreator)
@@ -97,113 +112,136 @@ public class ProductClientController {
     public ModelAndView createOrder(@ModelAttribute("newOrder") NewProductClientForm formOrder,
                                   BindingResult bindingResult,
                                   ModelMap model) {
+        try{
+            ProductClient productClient = new ProductClient();
+            productClient.setIdProduct(formOrder.getIdProduct());
+            productClient.setIdClient(formOrder.getIdClient());
+            productClient.setEndDate(formOrder.getEndDate());
+            productClient.setState(formOrder.getState());
 
-        if(bindingResult.hasErrors()){
-            model.addAttribute("index.html");
+            Date timestamp = new Date(System.currentTimeMillis());
+            productClient.setStartDate(timestamp);
+            productClient.setFinalPrice(formOrder.getFinalPrice());
+
+            //Assign the product client to userFollowingProductClient. This will be to follow-up email
+            //when assigned productClients are modified.
+
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String userName = authentication.getName();
+            User user = userService.getByEmail(userName);
+
+            Set<String> strUsers = Collections.singleton(formOrder.getUser());
+
+
+            Set<User> users = new HashSet<>();
+            List<User> usersByRole = userRepository.findByRoles(1);
+
+            usersByRole.forEach(userInRole -> {
+                User userForFollowUp = userInRole;
+                users.add(userForFollowUp);
+            });
+
+            users.add(user);
+            productClient.setUsers(users);
+
+            ProductClient newProductClient = productClientService.save(productClient);
+
+
+            users.forEach(userForEmail -> {
+                javaMailSender.sendEmail(userForEmail.getEmail(), "Se ha generado una nueva orden",
+                        "Se ha generado una" +
+                                " orden nueva. Numero de orden: '" + newProductClient.getId() + ", Entrega programada para: " +
+                                newProductClient.getEndDate() + "' " +
+                                ". Puedes continuar aqui http://localhost:8080/control/order/active?msg=1");
+            });
+            return new ModelAndView("redirect:/control/order/active", model);
+        } catch (Exception error){
+            System.out.println("Error on create order: " + error);
+            return new ModelAndView("redirect:/control/order/active?msg=2", model);
         }
-        ProductClient productClient = new ProductClient();
-        productClient.setIdProduct(formOrder.getIdProduct());
-        productClient.setIdClient(formOrder.getIdClient());
-        productClient.setEndDate(formOrder.getEndDate());
-        productClient.setState(formOrder.getState());
-
-        Date timestamp = new Date(System.currentTimeMillis());
-        productClient.setStartDate(timestamp);
-        productClient.setFinalPrice(formOrder.getFinalPrice());
-
-        //Assign the product client to userFollowingProductClient. This will be to follow-up email
-        //when assigned productClients are modified.
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userName = authentication.getName();
-        User user = userService.getByEmail(userName);
-
-        Set<String> strUsers = Collections.singleton(formOrder.getUser());
-
-
-        Set<User> users = new HashSet<>();
-        List<User> usersByRole = userRepository.findByRoles(1);
-
-        usersByRole.forEach(userInRole -> {
-            User userForFollowUp = userInRole;
-            users.add(userForFollowUp);
-        });
-
-        users.add(user);
-        productClient.setUsers(users);
-
-        ProductClient newProductClient = productClientService.save(productClient);
-
-
-        users.forEach(userForEmail -> {
-            javaMailSender.sendEmail(userForEmail.getEmail(), "Se ha generado una nueva orden",
-                    "Se ha generado una" +
-                    " orden nueva. Numero de orden: '" + newProductClient.getId() + ", Entrega programada para: " +
-                    newProductClient.getEndDate() + "' " +
-                    ". Puedes continuar aqui http://localhost:8080/control/order/active");
-        });
-        return new ModelAndView("redirect:/control/order/active", model);
     }
 
 
     @RequestMapping(value="/order={orderId}", method=RequestMethod.GET)
     public ModelAndView getOrder(@PathVariable("orderId") int orderId, Authentication authentication) {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("order/order.html");
-        modelAndView.addObject("productClient", productClientService.findById(orderId));
-        modelAndView.addObject("notes", noteRepository.findNoteByProductClient(orderId));
-        modelAndView.addObject("order", productClientRepository.findOrderById(orderId));
-        authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userName = authentication.getName();
-        User user = userService.getByEmail(userName);
-        System.out.println(userName);
-        modelAndView.addObject(user);
-        return modelAndView;
+        try {
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.setViewName("order/order.html");
+            modelAndView.addObject("productClient", productClientService.findById(orderId));
+            modelAndView.addObject("notes", noteRepository.findNoteByProductClient(orderId));
+            modelAndView.addObject("order", productClientRepository.findOrderById(orderId));
+            authentication = SecurityContextHolder.getContext().getAuthentication();
+            String userName = authentication.getName();
+            User user = userService.getByEmail(userName);
+            System.out.println(userName);
+            modelAndView.addObject(user);
+            return modelAndView;
+        } catch (Exception error){
+            System.out.println("Error on redirect to order: " + error);
+            return new ModelAndView("redirect:/control/order/active");
+        }
     }
 
     @RequestMapping(value = "/editOrderForm", method = RequestMethod.POST)
     public ModelAndView editOrder(@ModelAttribute("currentOrder") NewProductClientForm formOrder,
                                   BindingResult bindingResult,
                                   ModelMap model) {
+        try{
+            ProductClient productClient = new ProductClient();
+            productClient.setId(formOrder.getId());
+            productClient.setIdProduct(formOrder.getIdProduct());
+            productClient.setIdClient(formOrder.getIdClient());
+            productClient.setEndDate(formOrder.getEndDate());
+            productClient.setState(formOrder.getState());
+            productClient.setStartDate(formOrder.getStartDate());
+            productClient.setFinalPrice(formOrder.getFinalPrice());
+            productClient.setState(2);
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String userName = authentication.getName();
+            User user = userService.getByEmail(userName);
 
-        if(bindingResult.hasErrors()){
-            model.addAttribute("index.html");
+            Set<String> strUsers = Collections.singleton(formOrder.getUser());
+
+
+            Set<User> users = new HashSet<>();
+            List<User> usersByRole = userRepository.findByRoles(1);
+
+            usersByRole.forEach(userInRole -> {
+                User userForFollowUp = userInRole;
+                users.add(userForFollowUp);
+            });
+
+            users.add(user);
+            productClient.setUsers(users);
+
+            ProductClient editedProductClient = productClientService.save(productClient);
+
+            users.forEach(userForEmail -> {
+                javaMailSender.sendEmail(userForEmail.getEmail(), "Se ha editado una orden",
+                        "Se ha editado una" +
+                                " orden existente. Numero de orden: " + editedProductClient.getId() + ", Puedes ver mas " +
+                                "informacion aqui http://localhost:8080/control/order/order="+editedProductClient.getId()+"");
+            });
+            return new ModelAndView("redirect:/control/order/active?msg=3", model);
+        } catch (Exception error){
+            System.out.println("Error on edit order: " + error);
+            return new ModelAndView("redirect:/control/order/active?msg=4", model);
         }
-        ProductClient productClient = new ProductClient();
-        productClient.setId(formOrder.getId());
-        productClient.setIdProduct(formOrder.getIdProduct());
-        productClient.setIdClient(formOrder.getIdClient());
-        productClient.setEndDate(formOrder.getEndDate());
-        productClient.setState(formOrder.getState());
-        productClient.setStartDate(formOrder.getStartDate());
-        productClient.setFinalPrice(formOrder.getFinalPrice());
-        productClient.setState(2);
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userName = authentication.getName();
-        User user = userService.getByEmail(userName);
-
-        Set<String> strUsers = Collections.singleton(formOrder.getUser());
-
-
-        Set<User> users = new HashSet<>();
-        List<User> usersByRole = userRepository.findByRoles(1);
-
-        usersByRole.forEach(userInRole -> {
-            User userForFollowUp = userInRole;
-            users.add(userForFollowUp);
-        });
-
-        users.add(user);
-        productClient.setUsers(users);
-
-        ProductClient editedProductClient = productClientService.save(productClient);
-
-        users.forEach(userForEmail -> {
-            javaMailSender.sendEmail(userForEmail.getEmail(), "Se ha editado una orden",
-                    "Se ha editado una" +
-                            " orden existente. Numero de orden: " + editedProductClient.getId() + ", Puedes ver mas " +
-                            "informacion aqui http://localhost:8080/control/order/order="+editedProductClient.getId()+"");
-        });
-        return new ModelAndView("redirect:/control/order/active", model);
     }
+
+    @PostMapping("/deleteProductClient={idPC}")
+    public ModelAndView deleteProductClient(@PathVariable("idPC") int idPC){
+        try{
+            ProductClient productClient = productClientService.findById(idPC);
+            productClient.setState(5);
+            productClientService.save(productClient);
+
+
+            return new ModelAndView("redirect:/control/order/active?msg=5");
+        } catch (Exception error){
+            System.out.println("Error on client save: " + error);
+            return new ModelAndView("redirect:/control/order/active?msg=6");
+        }
+    }
+
 }
