@@ -18,12 +18,16 @@ import org.springframework.security.core.annotation.*;
 import org.springframework.security.core.context.*;
 import org.springframework.security.crypto.password.*;
 import org.springframework.ui.*;
+import org.springframework.util.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.*;
 
 import javax.servlet.http.*;
+import java.net.*;
 import java.sql.Date;
 import java.util.*;
+
+import static java.util.Objects.nonNull;
 
 @RestController
 @RequestMapping("/auth")
@@ -65,7 +69,7 @@ public class AuthController {
     @PostMapping("/signin")
     //cambiar a atribute o body
     public ModelAndView authenticateUser(@ModelAttribute("login") LoginForm loginRequest, HttpServletResponse response,
-                                         ModelMap model) {
+                                         ModelMap model, HttpServletRequest request) {
 
         User user = userRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User not found."));
@@ -86,10 +90,9 @@ public class AuthController {
 
 
             DeviceInfo deviceInfo = new DeviceInfo();
-            deviceInfo.setDeviceId("1");
-            deviceInfo.setDeviceType("1");
-
-
+            deviceInfo.setDeviceId(getRemoteAddr(request).toString());
+            String browserType = request.getHeader("User-Agent");
+            deviceInfo.setDeviceType(browserType);
 
             //Dev test, still waiting to implement user device creation
             UserDevice userDevice = userDeviceService.createUserDevice(deviceInfo);
@@ -114,8 +117,6 @@ public class AuthController {
 
 
             ResponseEntity.ok(new JwtResponse(jwtToken, refreshToken.getToken(), jwtProvider.getExpiryDuration()));
-
-
             return new ModelAndView("redirect:/index", model);
         }
         return new ModelAndView("redirect:/login", model);
@@ -273,5 +274,12 @@ public class AuthController {
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
                 .toString();
         return generatedString;
+    }
+
+    private String getRemoteAddr(HttpServletRequest req) {
+        if (!ObjectUtils.isEmpty(req.getHeader("X-Real-IP"))) {
+            return req.getHeader("X-Real-IP");
+        }
+        return req.getRemoteAddr();
     }
 }

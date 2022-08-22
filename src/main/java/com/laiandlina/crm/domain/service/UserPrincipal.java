@@ -1,6 +1,7 @@
 package com.laiandlina.crm.domain.service;
 
 import com.fasterxml.jackson.annotation.*;
+import com.laiandlina.crm.persistance.entity.*;
 import com.laiandlina.crm.persistance.entity.User;
 import lombok.*;
 import org.springframework.security.core.*;
@@ -21,7 +22,7 @@ public class UserPrincipal  implements  UserDetails{
     private String email;
     private String urlPhoto;
     private String phoneNumber;
-
+    private Set<Role> role;
     @JsonIgnore
     private String password;
 
@@ -31,7 +32,7 @@ public class UserPrincipal  implements  UserDetails{
 
     public UserPrincipal(int id, String firstName, String lastName,
                          String email, String password, String urlPhoto,
-                         String phoneNumber,
+                         String phoneNumber, Set<Role> role,
                          Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.firstName = firstName;
@@ -41,6 +42,7 @@ public class UserPrincipal  implements  UserDetails{
         this.authorities = authorities;
         this.urlPhoto = urlPhoto;
         this.phoneNumber = phoneNumber;
+        this.role = role;
     }
 
     public static UserPrincipal build(User user) {
@@ -56,6 +58,7 @@ public class UserPrincipal  implements  UserDetails{
                 user.getPassword(),
                 user.getUrlPhoto(),
                 user.getPhoneNumber(),
+                user.getRoles(),
                 authorities
         );
     }
@@ -69,6 +72,9 @@ public class UserPrincipal  implements  UserDetails{
 
     public String getLastName() {
         return lastName;
+    }
+    public Set<Role> getRole(){
+        return role;
     }
 
     public String getEmail() {

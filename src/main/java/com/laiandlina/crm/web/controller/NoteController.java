@@ -61,21 +61,13 @@ public class NoteController {
         users.add(user);
         note.getProductClient().setUsers(users);
 
+        String subject = "Pedido: #" + note.getProductClient().getId();
+        String body = "Se ha agregado una nueva nota.  " + note.getTitle() + " "  +
+                "publicada por " +  note.getUser().getFirstName() + " " +  note.getUser().getLastName() + ". " +
+                "Ha dicho: " + note.getDescription();
 
-        users.forEach(userForEmail -> {
-            javaMailSender.sendEmail(userForEmail.getEmail(), note.getTitle(),
-                    "Se ha agregado una" +
-                            " nueva nota. '" + note.getUser().getFirstName()  + " " + note.getUser().getLastName() + "," +
-                            " ha dicho : " +
-                            note.getDescription() + "'." +
-                            ". Puedes continuar aqui http://localhost:8000/control/order/order=" + note.getProductClient().getId());
-        });
-
-
-
-
+        javaMailSender.sendEmailToUser(subject, body, users);
         noteRepository.save(note);
-
         return new ModelAndView("redirect:/control/order/order=" + note.getProductClient().getId() + "", model);
     }
 
