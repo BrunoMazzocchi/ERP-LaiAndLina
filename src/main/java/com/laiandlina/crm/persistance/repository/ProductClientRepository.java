@@ -24,4 +24,7 @@ public interface ProductClientRepository extends JpaRepository<ProductClient, In
 
      @Query(nativeQuery = true, value = "SELECT * FROM vw_active_order where id = ?")
      VwOrder findOrderById(int orderId);
+
+     @Query(nativeQuery = true, value = "SELECT * FROM vw_completed_order where id = ?")
+     VwOrder findOrderByIdActive(int orderId);
 }

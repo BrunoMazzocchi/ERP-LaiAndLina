@@ -160,6 +160,24 @@ public class ProductClientController {
         }
     }
 
+    @RequestMapping(value="/orderCompleted={orderId}", method=RequestMethod.GET)
+    public ModelAndView getOrderCompleted(@PathVariable("orderId") int orderId,
+                                 @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        try {
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.setViewName("order/order.html");
+            modelAndView.addObject("productClient", productClientService.findById(orderId));
+            modelAndView.addObject("notes", noteRepository.findNoteByProductClient(orderId));
+            modelAndView.addObject("order", productClientRepository.findOrderByIdActive(orderId));
+            modelAndView.addObject(userPrincipal);
+            return modelAndView;
+        } catch (Exception error){
+            System.out.println("Error on redirect to order: " + error);
+            return new ModelAndView("redirect:/control/order/active");
+        }
+    }
+
+
     @RequestMapping(value = "/editOrderForm", method = RequestMethod.POST)
     public ModelAndView editOrder(@ModelAttribute("currentOrder") NewProductClientForm formOrder,
                                   ModelMap model,  @AuthenticationPrincipal UserPrincipal userPrincipal) {

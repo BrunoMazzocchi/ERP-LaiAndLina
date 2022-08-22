@@ -11,6 +11,7 @@ import org.springframework.security.core.annotation.*;
 import org.springframework.security.core.context.*;
 import org.springframework.stereotype.*;
 import org.springframework.ui.*;
+import org.springframework.util.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.*;
 
@@ -52,7 +53,10 @@ class AppController {
         //LogOut device information
         DeviceInfo deviceInfo = new DeviceInfo();
         deviceInfo.setDeviceId("1");
-        deviceInfo.setDeviceType("1");
+
+        deviceInfo.setDeviceId(getRemoteAddr(request).toString());
+        String browserType = request.getHeader("User-Agent");
+        deviceInfo.setDeviceType(browserType);
         logOutRequest.setDeviceInfo(deviceInfo);
 
 
@@ -90,5 +94,12 @@ class AppController {
     public String redirect() throws ParseException {
         return "redirect:/index";
 
+    }
+
+    private String getRemoteAddr(HttpServletRequest req) {
+        if (!ObjectUtils.isEmpty(req.getHeader("X-Real-IP"))) {
+            return req.getHeader("X-Real-IP");
+        }
+        return req.getRemoteAddr();
     }
 }

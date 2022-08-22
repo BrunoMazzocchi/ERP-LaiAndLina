@@ -94,6 +94,7 @@ public class AuthController {
             String browserType = request.getHeader("User-Agent");
             deviceInfo.setDeviceType(browserType);
 
+
             //Dev test, still waiting to implement user device creation
             UserDevice userDevice = userDeviceService.createUserDevice(deviceInfo);
             RefreshToken refreshToken = refreshTokenService.createRefreshToken();
