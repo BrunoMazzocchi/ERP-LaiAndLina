@@ -52,7 +52,6 @@ class AppController {
         logOutRequest.setToken(getToken(request));
         //LogOut device information
         DeviceInfo deviceInfo = new DeviceInfo();
-        deviceInfo.setDeviceId("1");
 
         deviceInfo.setDeviceId(getRemoteAddr(request).toString());
         String browserType = request.getHeader("User-Agent");
