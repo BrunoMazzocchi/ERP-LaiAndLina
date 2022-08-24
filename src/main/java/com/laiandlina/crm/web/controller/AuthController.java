@@ -153,7 +153,7 @@ public class AuthController {
         java.sql.Date timestamp = new Date(System.currentTimeMillis());
         user.setCreationDate(timestamp);
 
-        user.setUrlPhoto("stock-user.jpg");
+        user.setUrlPhoto("http://localhost:8000/images/stock-user.jpg");
 
         strRoles.forEach(role -> {
             switch (role) {
