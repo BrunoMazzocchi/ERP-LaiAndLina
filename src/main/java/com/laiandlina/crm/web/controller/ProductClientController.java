@@ -226,7 +226,7 @@ public class ProductClientController {
             productClientService.save(productClient);
             return new ModelAndView("redirect:/control/order/active?msg=5");
         } catch (Exception error){
-            System.out.println("Error on client save: " + error);
+            System.out.println("Error on order delete: " + error);
             return new ModelAndView("redirect:/control/order/active?msg=6");
         }
     }
