@@ -19,7 +19,6 @@ public class Post {
     private String title;
     private String description;
     private Date date;
-    private Integer state;
     private Integer user;
 
 

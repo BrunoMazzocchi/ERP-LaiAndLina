@@ -3,6 +3,7 @@ package com.laiandlina.crm.web.controller;
 import com.laiandlina.crm.domain.service.*;
 import com.laiandlina.crm.persistance.data.*;
 import com.laiandlina.crm.persistance.entity.*;
+import com.laiandlina.crm.persistance.repository.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.security.access.prepost.*;
 import org.springframework.security.authentication.*;
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.*;
 
 import javax.servlet.http.*;
 import java.text.*;
+import java.util.*;
 
 @Controller
 class AppController {
@@ -24,11 +26,12 @@ class AppController {
 
     @Autowired
     private UserService userService;
-
     @Autowired
     private AuthController authController;
 
 
+    @Autowired
+    private PostRepository postRepository;
     //The following controller will redirect you to the new Login form (AuthController Login)
     //If you are currently logged and try to go back, it will redirect you to main dashboard.
     @GetMapping("/login")
@@ -70,6 +73,7 @@ class AppController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("index");
         modelAndView.addObject(userPrincipal);
+        modelAndView.addObject("posts", postRepository.findAllPost());
         return modelAndView;
     }
 

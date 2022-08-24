@@ -51,7 +51,7 @@ public class UserController {
     //The following controller will redirect you to the new User form (AuthController Sign up)
     @RequestMapping(value="/newUser", method=RequestMethod.GET)
     @PreAuthorize("hasRole('ADMIN')")
-    public ModelAndView newOrder(Model model,
+    public ModelAndView newUser(Model model,
                                  @AuthenticationPrincipal UserPrincipal userPrincipal) throws ParseException {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject(userPrincipal);
