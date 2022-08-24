@@ -260,8 +260,9 @@
                                                         <label>Seleccione un producto</label>
                                                         <select class="js-example-basic-single w-100" id="idProduct" th:name="|idProduct|">
                                                             <option value="0">Selecciona...</option>
-                                                            <option th:each="products: ${product}" th:value="${products.id}" th:text="${products.name}"></option>
-
+                                                            <option th:each="products: ${product}"
+                                                                    th:value="${products.id}" th:text="${products.name}">
+                                                            </option>
                                                         </select>
                                                     </div>
                                                 </div>

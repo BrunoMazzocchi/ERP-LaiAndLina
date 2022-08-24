@@ -105,11 +105,12 @@ public class ProductClientController {
             productClient.setIdClient(formOrder.getIdClient());
             productClient.setEndDate(formOrder.getEndDate());
             productClient.setState(formOrder.getState());
-
+            productClient.setBasePrice(productService.findById(
+                    formOrder.getIdProduct()).stream().findFirst()
+                    .orElse(null).getPrice());
             Date timestamp = new Date(System.currentTimeMillis());
             productClient.setStartDate(timestamp);
             productClient.setFinalPrice(formOrder.getFinalPrice());
-
             //Assign the product client to userFollowingProductClient. This will be to follow-up email
             //when assigned productClients are modified.
 
