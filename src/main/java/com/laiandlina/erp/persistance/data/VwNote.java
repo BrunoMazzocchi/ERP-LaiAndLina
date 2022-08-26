@@ -1,4 +1,5 @@
-package com.laiandlina.crm.persistance.data;
+
+package com.laiandlina.erp.persistance.data;
 
 import java.sql.*;
 

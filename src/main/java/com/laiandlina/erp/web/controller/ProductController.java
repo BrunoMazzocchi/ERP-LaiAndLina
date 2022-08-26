@@ -3,6 +3,8 @@ package com.laiandlina.erp.web.controller;
 
 import com.laiandlina.erp.domain.service.*;
 import com.laiandlina.erp.persistance.data.*;
+import com.laiandlina.erp.persistance.entity.*;
+
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.security.core.annotation.*;
 import org.springframework.ui.*;

@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.*;
 
 import javax.servlet.http.*;
+import java.sql.Date;
+import java.text.*;
+import java.time.*;
 import java.text.*;
 import java.util.*;
 
@@ -29,8 +32,8 @@ class AppController {
     private UserService userService;
     @Autowired
     private AuthController authController;
-
-
+    @Autowired
+    private ProductClientRepository productClientRepository;
     @Autowired
     private PostRepository postRepository;
     //The following controller will redirect you to the new Login form (AuthController Login)
@@ -61,8 +64,6 @@ class AppController {
         String browserType = request.getHeader("User-Agent");
         deviceInfo.setDeviceType(browserType);
         logOutRequest.setDeviceInfo(deviceInfo);
-
-
         //LogOutUserPrincipal
         authController.logoutUser(userPrincipal, logOutRequest, request, response);
         return "redirect:/login";
@@ -75,6 +76,14 @@ class AppController {
         modelAndView.setViewName("index");
         modelAndView.addObject(userPrincipal);
         modelAndView.addObject("posts", postRepository.findAllPost());
+        LocalDate currentdate = LocalDate.now();
+        String currentStartMonth = currentdate.getYear() + "-" + currentdate.getMonthValue() + "-01";
+        List<Integer> orders =new ArrayList<Integer>();
+        orders.add(productClientRepository.getOrderCompletedCount(currentStartMonth));
+        orders.add(productClientRepository.getOrderActiveCount(currentStartMonth));
+
+        modelAndView.addObject("orders", orders);
+
         return modelAndView;
     }
 

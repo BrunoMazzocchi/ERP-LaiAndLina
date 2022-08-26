@@ -27,4 +27,24 @@ public interface ProductClientRepository extends JpaRepository<ProductClient, In
 
      @Query(nativeQuery = true, value = "SELECT * FROM vw_completed_order where id = ?")
      VwOrder findOrderByIdActive(int orderId);
+     
+     @Query(nativeQuery = true, value = "select count(*) as 'completed' from product_client where product_client.state = 4  and  start_date between ? and end_date;")
+     int getOrderCompletedCount(String startDate);
+
+     @Query(nativeQuery = true, value = "select count(*) as 'completed' from product_client where product_client.state < 4  and  start_date between ? and end_date;")
+     int getOrderActiveCount(String startDate);
+
+     @Query(nativeQuery = true, value = "SELECT\n" +
+             "MONTH(start_date) as 'month',\n" +
+             "COUNT(*) as 'count'\n" +
+             "FROM product_client where product_client.state = 4 and  start_date between start_date and end_date\n" +
+             "GROUP BY MONTH(start_date) order by month(start_date) asc;")
+     HashSet<List<Integer>> getOrderCompletedPerMonth();
+
+     @Query(nativeQuery = true, value = "SELECT\n" +
+             "MONTH(start_date) as 'month',\n" +
+             "COUNT(*) as 'count'\n" +
+             "FROM product_client where product_client.state < 4 and  start_date between start_date and end_date\n" +
+             "GROUP BY MONTH(start_date) order by month(start_date) asc")
+     HashSet<List<Integer>> getOrderActivePerMonth();
 }

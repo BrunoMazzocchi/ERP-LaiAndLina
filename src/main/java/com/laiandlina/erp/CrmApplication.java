@@ -6,7 +6,6 @@ import org.springframework.boot.web.servlet.*;
 
 @SpringBootApplication
 @ServletComponentScan
-
 public class CrmApplication {
 
 	public static void main(String[] args) {

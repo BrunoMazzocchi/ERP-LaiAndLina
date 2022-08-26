@@ -1,4 +1,6 @@
-package com.laiandlina.crm.persistance.entity;
+
+package com.laiandlina.erp.persistance.entity;
+
 
 import lombok.*;
 
