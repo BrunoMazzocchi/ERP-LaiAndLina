@@ -1,4 +1,4 @@
-package com.laiandlina.crm.web.controller;
+package com.laiandlina.erp.web.controller;
 
 import com.laiandlina.erp.domain.service.*;
 import com.laiandlina.erp.persistance.data.*;
@@ -34,8 +34,6 @@ class AppController {
     private AuthController authController;
     @Autowired
     private ProductClientRepository productClientRepository;
-    @Autowired
-    private PostRepository postRepository;
     //The following controller will redirect you to the new Login form (AuthController Login)
     //If you are currently logged and try to go back, it will redirect you to main dashboard.
     @GetMapping("/login")
@@ -75,7 +73,6 @@ class AppController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("index");
         modelAndView.addObject(userPrincipal);
-        modelAndView.addObject("posts", postRepository.findAllPost());
         LocalDate currentdate = LocalDate.now();
         String currentStartMonth = currentdate.getYear() + "-" + currentdate.getMonthValue() + "-01";
         List<Integer> orders =new ArrayList<Integer>();
