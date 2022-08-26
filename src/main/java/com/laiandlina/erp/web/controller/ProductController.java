@@ -1,6 +1,5 @@
 package com.laiandlina.erp.web.controller;
 
-
 import com.laiandlina.erp.domain.service.*;
 import com.laiandlina.erp.persistance.data.*;
 import com.laiandlina.erp.persistance.entity.*;
