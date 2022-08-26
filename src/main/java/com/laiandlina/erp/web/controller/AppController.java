@@ -21,6 +21,7 @@ import javax.servlet.http.*;
 import java.sql.Date;
 import java.text.*;
 import java.time.*;
+import java.text.*;
 import java.util.*;
 
 @Controller
@@ -33,7 +34,6 @@ class AppController {
     private AuthController authController;
     @Autowired
     private ProductClientRepository productClientRepository;
-
     @Autowired
     private PostRepository postRepository;
     //The following controller will redirect you to the new Login form (AuthController Login)
@@ -76,7 +76,6 @@ class AppController {
         modelAndView.setViewName("index");
         modelAndView.addObject(userPrincipal);
         modelAndView.addObject("posts", postRepository.findAllPost());
-
         LocalDate currentdate = LocalDate.now();
         String currentStartMonth = currentdate.getYear() + "-" + currentdate.getMonthValue() + "-01";
         List<Integer> orders =new ArrayList<Integer>();
@@ -84,11 +83,6 @@ class AppController {
         orders.add(productClientRepository.getOrderActiveCount(currentStartMonth));
 
         modelAndView.addObject("orders", orders);
-        System.out.println(productClientRepository.getOrderActivePerMonth());
-        System.out.println(productClientRepository.getOrderCompletedPerMonth());
-
-
-
 
         return modelAndView;
     }
