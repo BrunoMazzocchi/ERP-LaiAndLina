@@ -351,9 +351,9 @@
             }
             return 0 < se(t, C, null, [e]).length
         }, se.contains = function (e, t) {
-            return (e.ownerDocument || e) != C && T(e), y(e, t)
+            return (e.ownerDocument || e) !== C && T(e), y(e, t)
         }, se.attr = function (e, t) {
-            (e.ownerDocument || e) != C && T(e);
+            (e.ownerDocument || e) !== C && T(e);
             var n = b.attrHandle[t.toLowerCase()],
                 r = n && j.call(b.attrHandle, t.toLowerCase()) ? n(e, t, !E) : void 0;
             return void 0 !== r ? r : d.attributes || !E ? e.getAttribute(t) : (r = e.getAttributeNode(t)) && r.specified ? r.value : null

@@ -1,171 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Pedidos completados</title>
 
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Pedidos completados</title>
-  <!-- plugins:css -->
-  <link rel="stylesheet" href="../../static/vendors/feather/feather.css">
-  <link rel="stylesheet" href="../../static/vendors/mdi/css/materialdesignicons.min.css">
-  <link rel="stylesheet" href="../../static/vendors/ti-icons/css/themify-icons.css">
-  <link rel="stylesheet" href="../../static/vendors/typicons/typicons.css">
-  <link rel="stylesheet" href="../../static/vendors/simple-line-icons/css/simple-line-icons.css">
-  <link rel="stylesheet" href="../../static/vendors/css/vendor.bundle.base.css">
-  <!-- endinject -->
-  <!-- Plugin css for this page -->
-  <link rel="stylesheet" href="../static/vendors/datatables.net-bs4/dataTables.bootstrap4.css">
-  <link rel="stylesheet" href="../../static/js/select.dataTables.min.css">
-  <!-- End plugin css for this page -->
-  <!-- inject:css -->
-  <link rel="stylesheet" href="../../static/css/vertical-layout-light/style.css">
-  <!-- endinject -->
+    <link rel="stylesheet" href="../../static/vendors/feather/feather.css">
+    <link rel="stylesheet" href="../../static/vendors/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="../../static/vendors/ti-icons/css/themify-icons.css">
+    <link rel="stylesheet" href="../../static/vendors/typicons/typicons.css">
+    <link rel="stylesheet" href="../../static/vendors/simple-line-icons/css/simple-line-icons.css">
+    <link rel="shortcut icon" href="../../static/images/favicon.png"/>
 
-  <link rel="shortcut icon" href="../../static/images/favicon.png" />
-  <link rel="stylesheet" href="../../static/vendors/notie.js/dist/notie.css" />
-  <script src="../../static/vendors/notie.js/dist/notie.js"></script>
+    <link rel="stylesheet" href="../../static/css/vertical-layout-light/style.css">
+    <link rel="stylesheet" type="text/css" href="../../static/vendors/Bootstrap-5-5.1.3/css/bootstrap.min.css"/>
+
+    <link rel="stylesheet" type="text/css" href="../../static/vendors/DataTables/datatables.css"/>
+    <script type="text/javascript" src="../../static/vendors/DataTables/datatables.js" defer></script>
+
+    <link rel="stylesheet" href="../../static/vendors/notie.js/dist/notie.css"/>
+    <script src="../../static/vendors/notie.js/dist/notie.js"></script>
 </head>
-
 
 <body>
 <div class="container-scroller">
+    <div th:replace="fragments/nav.html :: nav"></div>
+    <div class="container-fluid page-body-wrapper">
+        <div th:replace="fragments/sidebar.html :: sidebar"></div>
+        <div class="main-panel">
+            <div class="content-wrapper">
+                <div class="row">
+                    <div class="col-lg-12 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Pedidos</h4>
+                                <a href="/control/order/newOrder"><i class="mdi mdi-plus-box"> </i>Agregar un nuevo
+                                    pedido</a>
+                                <p class="card-description">
+                                </p>
+                                <div class="table-responsive pt-3">
+                                    <table id="ordersTable" class="table table-striped table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th>
+                                                ID
+                                            </th>
+                                            <th>
+                                                Cliente
+                                            </th>
+                                            <th>
+                                                Nombre
+                                            </th>
+                                            <th>
+                                                Precio final
+                                            </th>
+                                            <th>
+                                                Estado
+                                            </th>
 
-  <!-- partial:partials/_navbar.html -->
-  <div th:replace="fragments/nav.html :: nav"></div>
+                                            <th>
+                                                Acciones
+                                            </th>
+                                        </tr>
+                                        </thead>
 
-  <!-- partial main -->
+                                        <tbody>
+                                        <tr th:each="orders: ${order}">
+                                            <td th:text="${orders.getId()}"/>
+                                            <td th:text="${orders.getClient()}"/>
+                                            <td th:text="${orders.getProduct()}"/>
+                                            <td th:text="${orders.getFinal_price()}"/>
+                                            <td th:switch="${orders.state}">
+                                                <label th:case="0" class="badge bg-danger">Comenzando</label>
+                                                <label th:case="1" class="badge bg-danger">En bodega</label>
+                                                <label th:case="2" class="badge bg-warning">En progreso</label>
+                                                <label th:case="3" class="badge bg-info">En taller</label>
+                                                <label th:case="4" class="badge bg-success">Completado</label>
 
-
-  <div class="container-fluid page-body-wrapper">
-
-    <div th:replace="fragments/sidebar.html :: sidebar"></div>
-
-
-
-    <div class="main-panel">
-      <div class="content-wrapper">
-        <div class="row">
-
-          <div class="col-lg-12 grid-margin stretch-card">
-            <div class="card">
-              <div class="card-body">
-                <h4 class="card-title">Pedidos</h4>
-                <a href="/control/order/newOrder" ><i class="mdi mdi-plus-box"> </i>Agregar un nuevo pedido</a>
-                <p class="card-description">
-                </p>
-                <div class="table-responsive pt-3">
-                  <table id="ordersTable" class="table table-bordered">
-                    <thead>
-                    <tr>
-                      <th>
-                        ID
-                      </th>
-                      <th>
-                        Cliente
-                      </th>
-                      <th>
-                        Nombre
-                      </th>
-                      <th>
-                        Precio final
-                      </th>
-                      <th>
-                        Estado
-                      </th>
-
-                      <th>
-                        Acciones
-                      </th>
-                    </tr>
-                    </thead>
-
-                    <tbody>
-                    <tr th:each="orders: ${order}">
-                      <td th:text="${orders.getId()}" />
-                      <td th:text="${orders.getClient()}" />
-                      <td th:text="${orders.getProduct()}" />
-                      <td th:text="${orders.getFinal_price()}" />
-                      <td th:switch="${orders.state}">
-                        <label th:case="0" class="badge badge-danger">Comenzando</label>
-                        <label th:case="1" class="badge badge-danger">En bodega</label>
-                        <label th:case="2" class="badge badge-warning">En progreso</label>
-                        <label th:case="3" class="badge badge-info">En taller</label>
-                        <label th:case="4" class="badge badge-success">Completado</label>
-
-                      </td>
-                      <td>
-                        <a th:href="@{'orderCompleted=' + ${orders.id}}"><i class="mdi mdi-file-document-box"></i></a>
-                      </td>
-                    </tr>
-                    </tbody>
-                  </table>
+                                            </td>
+                                            <td>
+                                                <a th:href="@{'orderCompleted=' + ${orders.id}}"><i
+                                                        class="mdi mdi-file-document-box"></i></a>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
-
+            <div th:replace="fragments/footer.html :: footer"></div>
         </div>
-      </div>
-      <!-- content-wrapper ends -->
-      <!-- partial:../../partials/_footer.html -->
-
-      <div th:replace="fragments/footer.html :: footer"></div>
-
-      <!-- partial -->
     </div>
-
-    <!-- main-panel ends -->
-  </div>
-  <!-- page-body-wrapper ends -->
 </div>
-<!-- container-scroller -->
-
-<!-- plugins:js -->
-<script src="vendors/js/vendor.bundle.base.js"></script>
-<!-- endinject -->
-<!-- Plugin js for this page -->
-<script src="vendors/chart.js/Chart.min.js"></script>
-<script src="vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
-<script src="vendors/progressbar.js/progressbar.min.js"></script>
-
-<!-- End plugin js for this page -->
-<!-- inject:js -->
-<script src="js/off-canvas.js"></script>
-<script src="js/hoverable-collapse.js"></script>
-<script src="js/template.js"></script>
-<script src="js/settings.js"></script>
-<script src="js/todolist.js"></script>
-<!-- endinject -->
-<!-- Custom js for this page-->
-<script src="js/jquery.cookie.js" type="text/javascript"></script>
-<script src="js/dashboard.js"></script>
-<script src="js/Chart.roundedBarCharts.js"></script>
-<!-- End custom js for this page-->
-</body>
-
-<!-- plugins:js -->
 <script src="../../static/vendors/js/vendor.bundle.base.js"></script>
-<!-- endinject -->
-<!-- Plugin js for this page -->
-<script src="../../static/vendors/chart.js/Chart.min.js"></script>
 <script src="../../static/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
-<script src="../../static/vendors/progressbar.js/progressbar.min.js"></script>
-
-<!-- End plugin js for this page -->
-<!-- inject:js -->
 <script src="../../static/js/off-canvas.js"></script>
 <script src="../../static/js/hoverable-collapse.js"></script>
-<script src="../../static/js/template.js"></script>
-<script src="../../static/js/settings.js"></script>
-<script src="../../static/js/todolist.js"></script>
-<!-- endinject -->
-<!-- Custom js for this page-->
 <script src="../../static/js/jquery.cookie.js" type="text/javascript"></script>
 <script src="../../static/js/dashboard.js"></script>
-<script src="../../static/js/Chart.roundedBarCharts.js"></script>
-<!-- End custom js for this page-->
-<script src="../../static/vendors/notie.js/notieImpl.js"> </script>
+<script src="../../static/js/template.js"></script>
+<script>
+    $(document).ready(function () {
+        var table = $('#ordersTable').DataTable();
+
+    });
+</script>
 </body>
 </html>
 
