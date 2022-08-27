@@ -400,15 +400,6 @@ $(function() {
             content: "<span style=\"font-weight:bold;\">Saint-Denis (93066)</span><br />Population : 107959"
           }
         },
-        "town-93066": {
-          value: "107959",
-          latitude: 48.935555555556,
-          longitude: 2.3538888888889,
-          href: "#",
-          tooltip: {
-            content: "<span style=\"font-weight:bold;\">Saint-Denis (93066)</span><br />Population : 107959"
-          }
-        },
         "town-54395": {
           value: "107710",
           latitude: 48.692777777778,
@@ -2110,15 +2101,6 @@ $(function() {
             content: "<span style=\"font-weight:bold;\">Saint-RaphaÃ«l (83118)</span><br />Population : 34220"
           }
         },
-        "town-83118": {
-          value: "34220",
-          latitude: 43.424722222222,
-          longitude: 6.7677777777778,
-          href: "#",
-          tooltip: {
-            content: "<span style=\"font-weight:bold;\">Saint-RaphaÃ«l (83118)</span><br />Population : 34220"
-          }
-        },
         "town-93072": {
           value: "34048",
           latitude: 48.955277777778,
@@ -3755,15 +3737,6 @@ $(function() {
           href: "#",
           tooltip: {
             content: "<span style=\"font-weight:bold;\">Forbach (57227)</span><br />Population : 21920"
-          }
-        },
-        "town-76108": {
-          value: "21876",
-          latitude: 49.460555555556,
-          longitude: 1.1080555555556,
-          href: "#",
-          tooltip: {
-            content: "<span style=\"font-weight:bold;\">Bois-Guillaume (76108)</span><br />Population : 21876"
           }
         },
         "town-76108": {
@@ -7283,15 +7256,6 @@ $(function() {
           href: "#",
           tooltip: {
             content: "<span style=\"font-weight:bold;\">Rognac (13081)</span><br />Population : 11928"
-          }
-        },
-        "town-74208": {
-          value: "11917",
-          latitude: 45.923611111111,
-          longitude: 6.6863888888889,
-          href: "#",
-          tooltip: {
-            content: "<span style=\"font-weight:bold;\">Passy (74208)</span><br />Population : 11917"
           }
         },
         "town-74208": {
