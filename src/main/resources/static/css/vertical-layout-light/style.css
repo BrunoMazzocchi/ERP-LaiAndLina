@@ -9293,7 +9293,10 @@ progress {
   margin-right: auto;
   margin-left: auto;
 }
-
+.container-fluid{
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
 @media (min-width: 576px) {
   .container, .container-sm {
     max-width: 540px;
