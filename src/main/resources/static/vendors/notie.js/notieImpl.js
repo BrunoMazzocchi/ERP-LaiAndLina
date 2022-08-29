@@ -26,4 +26,3 @@ function getParams(){
             break;
     }
 }
-$(document).ready(getParams());

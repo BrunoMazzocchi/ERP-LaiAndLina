@@ -26,5 +26,6 @@ public class NewProductClientForm {
     private Double basePrice;
     @NotNull
     private Double finalPrice;
+    private Double salePrice;
     private String user;
 }

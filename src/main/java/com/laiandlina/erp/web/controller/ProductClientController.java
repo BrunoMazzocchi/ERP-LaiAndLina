@@ -13,6 +13,7 @@ import org.springframework.web.servlet.*;
 import javax.servlet.http.*;
 import java.sql.Date;
 import java.text.*;
+import java.time.*;
 import java.util.*;
 
 @RestController
@@ -189,6 +190,7 @@ public class ProductClientController {
             productClient.setStartDate(formOrder.getStartDate());
             productClient.setFinalPrice(formOrder.getFinalPrice());
             productClient.setState(formOrder.getState());
+            productClient.setSalePrice(formOrder.getSalePrice());
             User user = userService.getByEmail(userPrincipal.getEmail());
             HashSet<User> users = new HashSet<>();
             var usersByRole = userRepository.findByRoles(1);

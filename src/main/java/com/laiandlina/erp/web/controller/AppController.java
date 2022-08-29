@@ -76,16 +76,16 @@ class AppController {
         modelAndView.addObject("activeOrderAmount", productClientRepository.getStartedOrder());
         modelAndView.addObject(userPrincipal);
         LocalDate currentDate = LocalDate.now();
-        String currentStartMonth = currentDate.getYear() + "-" + currentDate.getMonthValue() + "-01";
         List<Integer> orders =new ArrayList<Integer>();
-        orders.add(productClientRepository.getOrderCompletedCount(currentStartMonth));
-        orders.add(productClientRepository.getOrderActiveCount(currentStartMonth));
+        orders.add(productClientRepository.getOrderCompletedCount(currentDate.getMonthValue()));
+        orders.add(productClientRepository.getOrderActiveCount(currentDate.getMonthValue()));
         modelAndView.addObject("orders", orders);
 
 
         List<Integer> orderPerMonthCompleted = productClientRepository.getOrderCompletedPerMonth(currentDate.getYear());
         modelAndView.addObject("orderPerMonthCompleted", orderPerMonthCompleted);
-        modelAndView.addObject("orderSumAllYear", productClientRepository.getSumAllMonth(currentDate.getYear()));
+        modelAndView.addObject("orderSumAllYear",
+                productClientRepository.getSumAllMonth(currentDate.getYear(), currentDate.getMonthValue()));
         return modelAndView;
     }
 
