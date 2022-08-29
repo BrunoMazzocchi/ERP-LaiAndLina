@@ -18,7 +18,7 @@
 
     <link rel="stylesheet" href="../../static/vendors/notie.js/dist/notie.css"/>
     <script src="../../static/vendors/notie.js/dist/notie.js"></script>
-
+    <script src="../../static/vendors/notie.js/notieImpl.js"></script>
     <link rel="stylesheet" type="text/css" href="../../static/vendors/DataTables/datatables.min.css"/>
 </head>
 
@@ -134,6 +134,8 @@
     $(document).ready(function () {
         var table = $('#clientTable').DataTable();
     });
+
+    $(document).ready(getParams());
 </script>
 </body>
 

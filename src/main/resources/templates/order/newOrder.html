@@ -39,8 +39,8 @@
                                     <h4 class="card-title">Nueva ordern a trabajar</h4>
                                     <div class="form-group">
                                         <div class="col-md-12 grid-margin stretch-card">
-                                            <div class="card">
-                                                <div class="card-body">
+                                            <div>
+                                                <div>
                                                     <h4 class="card-title">Agregar cliente</h4>
                                                     <div class="form-group">
                                                         <label>Seleccione un cliente</label>
@@ -56,8 +56,8 @@
                                             </div>
                                         </div>
                                         <div class="col-md-12 grid-margin stretch-card">
-                                            <div class="card">
-                                                <div class="card-body">
+                                            <div>
+                                                <div>
                                                     <h4 class="card-title">Agregar un producto</h4>
                                                     <div class="form-group">
                                                         <label>Seleccione un producto</label>
@@ -76,14 +76,6 @@
                                     </div>
                                     <div class="form-group">
                                         <label>Etapa de producción</label>
-                                        <div class="form-check form-check-primary ">
-                                            <label class="form-check-label">
-                                                <input onclick="onlyOne(this)" type="checkbox"
-                                                       th:name="|state|" th:value="${4}"
-                                                       class="form-check-input">
-                                                Completado
-                                            </label>
-                                        </div>
                                         <div class="form-check form-check-success">
                                             <label class="form-check-label">
                                                 <input th:name="|state|" th:value="${1}" onclick="onlyOne(this)"

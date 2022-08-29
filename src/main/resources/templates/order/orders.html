@@ -19,6 +19,9 @@
     <script type="text/javascript" src="../../static/vendors/DataTables/datatables.js" defer></script>
 
     <link rel="stylesheet" href="../../static/vendors/notie.js/dist/notie.css"/>
+    <script src="../../static/vendors/notie.js/dist/notie.js"> </script>
+    <script src="../../static/vendors/notie.js/notieImpl.js"> </script>
+
 </head>
 <body>
 <div class="container-scroller">
@@ -126,9 +129,9 @@
         var table = $('#ordersTable').DataTable();
 
     });
-</script>
-<script src="../../static/vendors/notie.js/dist/notie.js"></script>
 
+    $(document).ready(getParams());
+</script>
 </body>
 </html>
 

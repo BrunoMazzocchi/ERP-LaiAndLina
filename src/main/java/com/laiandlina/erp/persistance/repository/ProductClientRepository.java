@@ -5,6 +5,7 @@ import com.laiandlina.erp.persistance.entity.*;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.*;
 
+import java.time.*;
 import java.util.*;
 
 @Repository
@@ -30,24 +31,23 @@ public interface ProductClientRepository extends JpaRepository<ProductClient, In
 
      @Query(nativeQuery = true, value = "SELECT * FROM vw_completed_order where id = ?")
      VwOrder findOrderByIdActive(int orderId);
-     
-     @Query(nativeQuery = true, value = "select count(*) as 'completed' from product_client where product_client.state = 4  and  start_date between ? and end_date;")
-     int getOrderCompletedCount(String startDate);
+     @Query(nativeQuery = true, value = "select count(*) as 'completed' from product_client where product_client.state = 4  and  month(end_date) = ?")
+     int getOrderCompletedCount(int month);
 
-     @Query(nativeQuery = true, value = "select count(*) as 'completed' from product_client where product_client.state < 4  and  start_date between ? and end_date;")
-     int getOrderActiveCount(String startDate);
+     @Query(nativeQuery = true, value = "select count(*) as 'completed' from product_client where product_client.state < 4  and  month(start_date) = ?")
+     int getOrderActiveCount(int month);
      @Query(nativeQuery = true, value = "select count(*) as 'completed' from product_client where product_client.state = 0")
      int getStartedOrder();
-     @Query(nativeQuery = true, value = "select sum(final_price) from product_client where year (start_date) = ? and state = 4;")
-     double getSumAllMonth(int year);
+     @Query(nativeQuery = true, value = "select sum(sale_price) from product_client where year (end_date) = ? and month(end_date) = ? and state = 4;")
+     double getSumAllMonth(int year, int month);
 
-     @Query(nativeQuery = true, value = "SELECT sum(product_client.final_price) as 'sum'\n" +
+     @Query(nativeQuery = true, value = "SELECT sum(product_client.sale_price) as 'sum'\n" +
              "FROM (select 1 as mon union all select 2 union all select 3 union all select 4 union all\n" +
              "      select 5 union all select 6 union all select 7 union all select 8 union all\n" +
              "      select 9 union all select 10 union all select 11 union all select 12\n" +
              "     ) m left outer join\n" +
              "     product_client\n" +
-             "     on m.mon = month(start_date) and year(start_date) = ?\n" +
+             "     on m.mon = month(end_date) and year(end_date) = ?\n" +
              "GROUP BY m.mon order by mon asc;\n" +
              "\n")
      List<Integer> getOrderCompletedPerMonth(int year);

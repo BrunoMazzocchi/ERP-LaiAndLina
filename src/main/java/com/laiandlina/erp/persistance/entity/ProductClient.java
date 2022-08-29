@@ -23,7 +23,7 @@ public class ProductClient {
 
     private double basePrice;
     private double finalPrice;
-
+    private double salePrice;
     private Integer state;
 
     @ManyToOne

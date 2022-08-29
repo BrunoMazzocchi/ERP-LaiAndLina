@@ -12,4 +12,5 @@ public interface VwOrder {
      int getState();
      String getClient();
      String getProduct();
+     Double getSale_price();
 }

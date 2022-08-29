@@ -52,14 +52,10 @@
                                                 Nombre
                                             </th>
                                             <th>
-                                                Precio final
+                                                Precio de venta
                                             </th>
                                             <th>
                                                 Estado
-                                            </th>
-
-                                            <th>
-                                                Acciones
                                             </th>
                                         </tr>
                                         </thead>
@@ -69,18 +65,13 @@
                                             <td th:text="${orders.getId()}"/>
                                             <td th:text="${orders.getClient()}"/>
                                             <td th:text="${orders.getProduct()}"/>
-                                            <td th:text="${orders.getFinal_price()}"/>
+                                            <td th:text="${orders.getSale_price()}"/>
                                             <td th:switch="${orders.state}">
                                                 <label th:case="0" class="badge bg-danger">Comenzando</label>
                                                 <label th:case="1" class="badge bg-danger">En bodega</label>
                                                 <label th:case="2" class="badge bg-warning">En progreso</label>
                                                 <label th:case="3" class="badge bg-info">En taller</label>
                                                 <label th:case="4" class="badge bg-success">Completado</label>
-
-                                            </td>
-                                            <td>
-                                                <a th:href="@{'orderCompleted=' + ${orders.id}}"><i
-                                                        class="mdi mdi-file-document-box"></i></a>
                                             </td>
                                         </tr>
                                         </tbody>
