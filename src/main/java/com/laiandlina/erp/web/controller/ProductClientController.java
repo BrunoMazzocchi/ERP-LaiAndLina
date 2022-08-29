@@ -188,7 +188,7 @@ public class ProductClientController {
             productClient.setState(formOrder.getState());
             productClient.setStartDate(formOrder.getStartDate());
             productClient.setFinalPrice(formOrder.getFinalPrice());
-            productClient.setState(2);
+            productClient.setState(formOrder.getState());
             User user = userService.getByEmail(userPrincipal.getEmail());
             HashSet<User> users = new HashSet<>();
             var usersByRole = userRepository.findByRoles(1);
