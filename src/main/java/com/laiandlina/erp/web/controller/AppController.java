@@ -72,15 +72,20 @@ class AppController {
     public ModelAndView dashboard(@AuthenticationPrincipal UserPrincipal userPrincipal) throws ParseException {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("index");
+        modelAndView.addObject("order", productClientRepository.getVwActiveStarted());
+        modelAndView.addObject("activeOrderAmount", productClientRepository.getStartedOrder());
         modelAndView.addObject(userPrincipal);
-        LocalDate currentdate = LocalDate.now();
-        String currentStartMonth = currentdate.getYear() + "-" + currentdate.getMonthValue() + "-01";
+        LocalDate currentDate = LocalDate.now();
+        String currentStartMonth = currentDate.getYear() + "-" + currentDate.getMonthValue() + "-01";
         List<Integer> orders =new ArrayList<Integer>();
         orders.add(productClientRepository.getOrderCompletedCount(currentStartMonth));
         orders.add(productClientRepository.getOrderActiveCount(currentStartMonth));
-
         modelAndView.addObject("orders", orders);
 
+
+        List<Integer> orderPerMonthCompleted = productClientRepository.getOrderCompletedPerMonth(currentDate.getYear());
+        modelAndView.addObject("orderPerMonthCompleted", orderPerMonthCompleted);
+        modelAndView.addObject("orderSumAllYear", productClientRepository.getSumAllMonth(currentDate.getYear()));
         return modelAndView;
     }
 

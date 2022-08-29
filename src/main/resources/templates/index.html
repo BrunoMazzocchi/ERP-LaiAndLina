@@ -15,7 +15,8 @@
 
     <link rel="stylesheet" href="../static/css/vertical-layout-light/style.css">
     <link rel="stylesheet" type="text/css" href="../static/vendors/Bootstrap-5-5.1.3/css/bootstrap.min.css"/>
-
+    <link rel="stylesheet" type="text/css" href="../../static/vendors/DataTables/datatables.css"/>
+    <script type="text/javascript" src="../../static/vendors/DataTables/datatables.js" defer></script>
 </head>
 <body class="container-scroller">
 <div th:replace="fragments/nav.html :: nav"></div>
@@ -34,26 +35,121 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12" style="margin-top: 10px">
-                                <div class="row" style="max-height: 38rem; overflow:auto; margin-bottom: 10px;">
-                                    <div class="col-md-6">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <h4 class="card-title">Pedidos en este mes</h4>
-                                                <canvas id="pieChart"></canvas>
-                                                <h6 style="margin-top: 40px;">Pedidos iniciados este mes y terminados
-                                                    este mes.</h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                        <div class="col-md-6">
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <h4 class="card-title">Pedidos de los ultimos 12 meses</h4>
-                                                    <canvas id="barChart"></canvas>
-                                                    <h5 style="margin-top: 60px;"></h5>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="tab-content tab-content-basic">
+                                            <div class="tab-pane fade show active" id="overview" role="tabpanel"
+                                                 aria-labelledby="overview">
+                                                <div class="row">
+                                                    <div class="col-lg-8 d-flex flex-column">
+                                                        <div class="row flex-grow">
+                                                            <div class="col-12 col-lg-4 col-lg-12 grid-margin stretch-card">
+                                                                <div class="card">
+                                                                    <div class="card-body">
+                                                                        <div class="d-sm-flex justify-content-between align-items-start">
+                                                                            <div>
+                                                                                <h4 class="card-title card-title-dash">
+                                                                                    Este año</h4>
+                                                                                <p class="card-subtitle card-subtitle-dash">
+                                                                                    Pedidos que se completaron en cada mes</p>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="d-sm-flex align-items-center mt-1 justify-content-between">
+                                                                            <div class="d-sm-flex align-items-center mt-4 justify-content-between">
+                                                                                <h2 class="me-2 fw-bold"
+                                                                                    th:text="'$' + ${orderSumAllYear} + ''">>
+                                                                                    </h2><h4 class="me-2">
+                                                                                </h4></div>
+                                                                            <div class="me-3">
+                                                                                <div id="marketing-overview-legend"></div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="chartjs-bar-wrapper mt-3">
+                                                                            <canvas id="orderCompletedPerMonth"></canvas>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-4 d-flex flex-column">
+                                                        <div class="row flex-grow">
+                                                            <div class="col-md-6 col-lg-12 grid-margin stretch-card">
+                                                                <div class="card">
+                                                                    <div class="card-body">
+                                                                        <h4 class="card-title">Pedidos en este mes</h4>
+                                                                        <canvas id="pieChart"></canvas>
+                                                                        <h6 style="margin-top: 40px;">Pedidos iniciados
+                                                                            este mes y terminados este mes.</h6>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-16 d-flex flex-column">
+                                                        <div class="row flex-grow">
+                                                            <div class="col-12 grid-margin stretch-card">
+                                                                <div class="card">
+                                                                    <div class="card-body">
+                                                                        <div class="d-sm-flex justify-content-between align-items-start">
+                                                                            <div>
+                                                                                <h4 class="card-title card-title-dash">
+                                                                                    Pedidos iniciados</h4>
+                                                                                <p class="card-subtitle card-subtitle-dash"
+                                                                                   th:text="'Tienes ' + ${activeOrderAmount} + ' ordenes activas.'">
+                                                                                </p>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="table-responsive  mt-1">
+                                                                            <table id="activeOrder" class="table table-striped table-hover">
+                                                                                <thead>
+                                                                                <tr>
+                                                                                    <th>
+                                                                                        ID
+                                                                                    </th>
+                                                                                    <th>
+                                                                                        Cliente
+                                                                                    </th>
+                                                                                    <th>
+                                                                                        Nombre
+                                                                                    </th>
+                                                                                    <th>
+                                                                                        Precio actual
+                                                                                    </th>
+                                                                                    <th>
+                                                                                        Estado
+                                                                                    </th>
+                                                                                </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                <tr th:each="orders: ${order}">
+                                                                                    <td th:text="${orders.getId()}"/>
+                                                                                    <td th:text="${orders.getClient()}"/>
+                                                                                    <td th:text="${orders.getProduct()}"/>
+                                                                                    <td th:text="${orders.getFinal_price()}"/>
+                                                                                    <td th:switch="${orders.state}">
+                                                                                        <label th:case="0" class="badge bg-danger">Comenzando</label>
+                                                                                        <label th:case="1" class="badge bg-danger">En bodega</label>
+                                                                                        <label th:case="2" class="badge bg-warning">En progreso</label>
+                                                                                        <label th:case="3" class="badge bg-info">En taller</label>
+                                                                                        <label th:case="4" class="badge bg-success">Completado</label>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                </tbody>
+                                                                            </table>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
                                 </div>
                             </div>
                             <div th:replace="fragments/footer.html :: footer"></div>
@@ -75,20 +171,19 @@
 
 <script th:inline="javascript">
     var orders = [[${orders}]];
-    $(function (completedOrder, activeOrder) {
-        completedOrder = 4;
-        activeOrder = 3;
+    var orderPerMonthCompleted = [[${orderPerMonthCompleted.toArray()}]];
+    $(function () {
         'use strict';
         var pieData = {
             datasets: [{
                 data: orders,
                 backgroundColor: [
-                    'rgba(255, 99, 132, 0.5)',
-                    'rgba(54, 162, 235, 0.5)',
-                    'rgba(255, 206, 86, 0.5)',
-                    'rgba(75, 192, 192, 0.5)',
-                    'rgba(153, 102, 255, 0.5)',
-                    'rgba(255, 159, 64, 0.5)'
+                    'rgba(255,99,132,1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
                 ],
                 borderColor: [
                     'rgba(255,99,132,1)',
@@ -113,72 +208,6 @@
                 animateRotate: true
             }
         };
-        var barData = {
-            datasets: [{
-                data: orders,
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.5)',
-                    'rgba(54, 162, 235, 0.5)',
-                    'rgba(255, 206, 86, 0.5)',
-                    'rgba(75, 192, 192, 0.5)',
-                    'rgba(153, 102, 255, 0.5)',
-                    'rgba(255, 159, 64, 0.5)'
-                ],
-                borderColor: [
-                    'rgba(255,99,132,1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-            },
-                {
-                    data: orders,
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.5)',
-                        'rgba(54, 162, 235, 0.5)',
-                        'rgba(255, 206, 86, 0.5)',
-                        'rgba(75, 192, 192, 0.5)',
-                        'rgba(153, 102, 255, 0.5)',
-                        'rgba(255, 159, 64, 0.5)'
-                    ],
-                    borderColor: [
-                        'rgba(255,99,132,1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                }],
-
-            // These labels appear in the legend and in the tooltips when hovering different arcs
-            labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre',
-                'Noviembre', 'Diciembre']
-        };
-
-
-        var barOptions = {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
-            },
-            legend: {
-                display: false
-            },
-            elements: {
-                point: {
-                    radius: 0
-                }
-            }
-
-        };
-
-
         if ($("#pieChart").length) {
             var pieChartCanvas = $("#pieChart").get(0).getContext("2d");
             var pieChart = new Chart(pieChartCanvas, {
@@ -188,15 +217,98 @@
             });
         }
 
-        if ($("#barChart").length) {
-            var barChartCanvas = $("#barChart").get(0).getContext("2d");
-            // This will get the first returned node in the jQuery collection.
-            var barChart = new Chart(barChartCanvas, {
+
+
+        if ($("#orderCompletedPerMonth").length) {
+            var orderCompletedPerMonthChart = document.getElementById("orderCompletedPerMonth").getContext('2d');
+            var orderCompletedPerMonthData = {
+                labels: ["JAN","FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"],
+                datasets: [{
+                    label: 'This month',
+                    data: orderPerMonthCompleted,
+                    backgroundColor: "#52CDFF",
+                    borderColor: [
+                        '#52CDFF',
+                    ],
+                    borderWidth: 0,
+                    fill: true, // 3: no fill
+
+                }]
+            };
+
+            var orderCompletedPerMonthOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    yAxes: [{
+                        gridLines: {
+                            display: true,
+                            drawBorder: false,
+                            color:"#F0F0F0",
+                            zeroLineColor: '#F0F0F0',
+                        },
+                        ticks: {
+                            beginAtZero: true,
+                            autoSkip: true,
+                            maxTicksLimit: 5,
+                            fontSize: 10,
+                            color:"#6B778C"
+                        }
+                    }],
+                    xAxes: [{
+                        stacked: true,
+                        barPercentage: 0.35,
+                        gridLines: {
+                            display: false,
+                            drawBorder: false,
+                        },
+                        ticks: {
+                            beginAtZero: false,
+                            autoSkip: true,
+                            maxTicksLimit: 12,
+                            fontSize: 10,
+                            color:"#6B778C"
+                        }
+                    }],
+                },
+                legend:false,
+                legendCallback: function (chart) {
+                    var text = [];
+                    text.push('<div class="chartjs-legend"><ul>');
+                    for (var i = 0; i < chart.data.datasets.length; i++) {
+                        console.log(chart.data.datasets[i]); // see what's inside the obj.
+                        text.push('<li class="text-muted text-small">');
+                        text.push('<span style="background-color:' + chart.data.datasets[i].borderColor + '">' + '</span>');
+                        text.push(chart.data.datasets[i].label);
+                        text.push('</li>');
+                    }
+                    text.push('</ul></div>');
+                    return text.join("");
+                },
+
+                elements: {
+                    line: {
+                        tension: 0.4,
+                    }
+                },
+                tooltips: {
+                    backgroundColor: 'rgba(31, 59, 179, 1)',
+                }
+            }
+            var orderCompletedPerMonth = new Chart(orderCompletedPerMonthChart, {
                 type: 'bar',
-                data: barData,
-                options: barOptions
+                data: orderCompletedPerMonthData,
+                options: orderCompletedPerMonthOptions
             });
+            document.getElementById('marketing-overview-legend').innerHTML = orderCompletedPerMonth.generateLegend();
         }
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        var table = $('#activeOrder').DataTable();
+
     });
 </script>
 </body>
