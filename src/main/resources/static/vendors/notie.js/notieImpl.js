@@ -24,5 +24,11 @@ function getParams(){
         case "6":
             notie.alert({ type: 'error', text: 'Ocurrio un error al eliminar.', time: 2 })
             break;
+        case "7":
+            notie.alert({ type: 'success', text: 'Se ha activado correctamente.', time: 2 })
+            break;
+            case "8":
+            notie.alert({ type: 'error', text: 'Ocurrio un error al reactivar usuario.', time: 2 })
+            break;
     }
 }

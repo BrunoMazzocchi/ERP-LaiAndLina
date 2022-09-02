@@ -71,6 +71,20 @@ public class UserController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/disabled", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ADMIN')")
+    public ModelAndView getAllDisabledUsers( @AuthenticationPrincipal UserPrincipal userPrincipal){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("user/disabledUser.html");
+        modelAndView.addObject("CurrentUser", userPrincipal);
+        modelAndView.addObject("userList", userRepository.getAllDisabledUser());
+        Optional<VwUserDepartment> user1 = userRepository.getAllDisabledUser().stream().findFirst();
+        System.out.println(user1);
+        modelAndView.addObject(userPrincipal);
+
+        return modelAndView;
+    }
+
     //Function to upload profile pictures, however they are getting saved on static directoy. Must be changed.
     @RequestMapping(value = "/changePicture", method = RequestMethod.POST)
     public ModelAndView changeProfilePicture(   @RequestParam("myPicture") MultipartFile multipartFile,
@@ -112,6 +126,20 @@ public class UserController {
         } catch (Exception error){
             System.out.println("Error on user delete: " + error);
             return new ModelAndView("redirect:/user/users?msg=6");
+        }
+    }
+
+    @PostMapping("/activateUser={idUser}")
+    public ModelAndView reactivateUser(@PathVariable("idUser") int idUser){
+        try{
+            User user = userRepository.findById(idUser).stream().findFirst().orElseThrow(null);
+            user.setState(2);
+            user.setActive(true);
+            userRepository.save(user);
+            return new ModelAndView("redirect:/user/users?msg=7");
+        } catch (Exception error){
+            System.out.println("Error on user delete: " + error);
+            return new ModelAndView("redirect:/user/users?msg=8");
         }
     }
 }

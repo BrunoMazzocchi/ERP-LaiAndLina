@@ -24,7 +24,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Query(nativeQuery = true, value = "select * from vw_user_department where state = 3")
     List<VwUserDepartment> getAllDisabledUser();
-    
+
     @Query(nativeQuery = true, value = "select user.* from role\n" +
             "inner join user_roles\n" +
             "\ton user_roles.role_id = role.id\n" +
