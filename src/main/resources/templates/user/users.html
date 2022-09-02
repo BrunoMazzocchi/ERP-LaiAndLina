@@ -80,6 +80,11 @@
                                             </td>
                                             <td>
                                                 <a th:href="@{'/user/editUser=' + ${userL.id}}"><i class="mdi mdi-file-document-box"></i></a>
+                                                <form id="deleteForm" name="deleteForm">
+                                                    <a action th:attr="onclick=${'confirmCancellation('+userL.id+')'}">
+                                                        <i class="mdi mdi-delete"></i>
+                                                    </a>
+                                                </form>
                                             </td>
                                         </tr>
                                         </tbody>
@@ -125,6 +130,22 @@
         });
 
         $(document).ready(getParams());
+    </script>
+
+    <script>
+        function confirmCancellation(id) {
+            notie.confirm({
+                text: 'Seguro que quieres desactviarlo?',
+                cancelCallback: () => notie.alert({type: 3, text: 'Gracias por confirmar.'}),
+                submitCallback: () => {
+                    notie.alert({type: 1, text: 'Eliminando...'})
+
+                    document.getElementById('deleteForm').action = "/user/disableUser=" + id;
+                    document.getElementById('deleteForm').method = "post";
+                    document.getElementById('deleteForm').submit();
+                }
+            })
+        }
     </script>
 </body>
 </html>

@@ -101,4 +101,17 @@ public class UserController {
         }
     }
 
+    @PostMapping("/disableUser={idUser}")
+    public ModelAndView deleteProductClient(@PathVariable("idUser") int idUser){
+        try{
+            User user = userRepository.findById(idUser).stream().findFirst().orElseThrow(null);
+            user.setState(3);
+            user.setActive(false);
+            userRepository.save(user);
+            return new ModelAndView("redirect:/user/users?msg=5");
+        } catch (Exception error){
+            System.out.println("Error on user delete: " + error);
+            return new ModelAndView("redirect:/user/users?msg=6");
+        }
+    }
 }
