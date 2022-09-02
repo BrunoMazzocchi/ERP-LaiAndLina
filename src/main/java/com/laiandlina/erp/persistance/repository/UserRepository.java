@@ -22,11 +22,14 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query(nativeQuery = true, value = "select * from vw_user_department where state <> 3")
     List<VwUserDepartment> findAllUser();
 
+    @Query(nativeQuery = true, value = "select * from vw_user_department where state = 3")
+    List<VwUserDepartment> getAllDisabledUser();
+
     @Query(nativeQuery = true, value = "select user.* from role\n" +
             "inner join user_roles\n" +
             "\ton user_roles.role_id = role.id\n" +
             "    inner join user \n" +
-            "\t\ton user_roles.user_id = user.id where role.id =  ? and user.active = 1;")
+            "\t\ton user_roles.user_id = user.id where role.id =  ? and user.active = 1 and state <> 3;")
     List<User> findByRoles(int idRol);
 
     @Modifying
