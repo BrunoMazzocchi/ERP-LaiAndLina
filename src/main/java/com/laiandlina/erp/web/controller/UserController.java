@@ -65,7 +65,6 @@ public class UserController {
         modelAndView.addObject("CurrentUser", userPrincipal);
         modelAndView.addObject("userList", userRepository.findAllUser());
         Optional<VwUserDepartment> user1 = userRepository.findAllUser().stream().findFirst();
-        System.out.println(user1);
         modelAndView.addObject(userPrincipal);
 
         return modelAndView;
@@ -79,7 +78,6 @@ public class UserController {
         modelAndView.addObject("CurrentUser", userPrincipal);
         modelAndView.addObject("userList", userRepository.getAllDisabledUser());
         Optional<VwUserDepartment> user1 = userRepository.getAllDisabledUser().stream().findFirst();
-        System.out.println(user1);
         modelAndView.addObject(userPrincipal);
 
         return modelAndView;
@@ -140,6 +138,23 @@ public class UserController {
         } catch (Exception error){
             System.out.println("Error on user delete: " + error);
             return new ModelAndView("redirect:/user/users?msg=8");
+        }
+    }
+
+    //The following controller will redirect you to all user list
+    @RequestMapping(value = "/editUser={idUser}", method = RequestMethod.GET)
+    public ModelAndView viewUser( @AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable("idUser") int idUser){
+
+        try{
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.setViewName("user/viewUser.html");
+            modelAndView.addObject("CurrentUser", userPrincipal);
+            modelAndView.addObject("viewUser", userRepository.getUserById(idUser));
+            modelAndView.addObject(userPrincipal);
+            return  modelAndView;
+        } catch (Exception error){
+            System.out.println("Error on get user: " + error);
+            return new ModelAndView("redirect:/user/users?msg=2");
         }
     }
 }
