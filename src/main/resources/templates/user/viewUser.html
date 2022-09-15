@@ -37,75 +37,56 @@
 
         <div th:replace="fragments/sidebar.html :: sidebar"></div>
 
-
-
         <div class="main-panel">
             <div class="content-wrapper">
                 <div class="row">
-                     <div class="container py-5">
-                            <div class="row">
-                                <div class="col-lg-4">
-                                    <div class="card mb-4">
-                                        <div class="card-body text-center">
-                                            <img th:src="${userPrincipal.getUrlPhoto()}" alt="avatar"
-                                                 class="rounded-circle img-fluid" style="width: 150px; height: 150px;">
-                                            <h5 class="my-3" th:text="${userPrincipal.getFirstName()} + ' ' + ${userPrincipal.getLastName()}"></h5>
-                                        </div>
-                                    </div>
-                                    <div class="card mb-4 mb-lg-0">
-                                        <div class="card-body p-0">
-                                            <ul class="list-group list-group-flush rounded-3">
-                                                <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                                                    <form th:action="@{/user/changePicture}" th:object="${uploadPictureForm}" method="post" enctype="multipart/form-data">
-                                                            <input required type="file" id="myPicture"  accept="image/jpg"  th:name="|myPicture|" placeholder="Seleccionar archivo">
-                                                            <input hidden th:value="${userPrincipal.getId()}" th:name="|idUser|" readonly >
-                                                            <button type="submit" class="btn btn-danger btn-icon-text">
-                                                                <i class="ti-upload btn-icon-prepend"></i>
-                                                                Cambiar foto
-                                                            </button>
-                                                    </form>
-                                                </li>
-
-                                            </ul>
-                                        </div>
+                    <div class="container py-5">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="card mb-4">
+                                    <div class="card-body text-center">
+                                        <img th:src="${viewUser.urlPhoto}" alt="avatar"
+                                             class="rounded-circle img-fluid" style="width: 150px; height: 150px;">
+                                        <h5 class="my-3" th:text="${viewUser.firstName} + ' ' + ${viewUser.lastName}"></h5>
                                     </div>
                                 </div>
-                                <div class="col-lg-8">
-                                    <div class="card mb-4">
-                                        <div class="card-body">
-                                            <div class="row">
-                                                <div class="col-sm-3">
-                                                    <p class="mb-0">Full Name</p>
-                                                </div>
-                                                <div class="col-sm-9">
-                                                    <p class="text-muted mb-0" th:text="${userPrincipal.getFirstName()}
-                                                     + ' ' + ${userPrincipal.getLastName()}"></p>
-                                                </div>
+                            </div>
+                            <div class="col-lg-8">
+                                <div class="card mb-4">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <p class="mb-0">Full Name</p>
                                             </div>
-                                            <hr>
-                                            <div class="row">
-                                                <div class="col-sm-3">
-                                                    <p class="mb-0">Email</p>
-                                                </div>
-                                                <div class="col-sm-9">
-                                                    <p class="text-muted mb-0" th:text="${userPrincipal.getEmail()}"></p>
-                                                </div>
+                                            <div class="col-sm-9">
+                                                <p class="text-muted mb-0" th:text="${viewUser.firstName}
+                                                     + ' ' + ${viewUser.lastName}"></p>
                                             </div>
-                                            <hr>
-                                            <div class="row">
-                                                <div class="col-sm-3">
-                                                    <p class="mb-0">Número </p>
-                                                </div>
-                                                <div class="col-sm-9">
-                                                    <p class="text-muted mb-0"  th:text="${userPrincipal.getPhoneNumber()}"></p>
-                                                </div>
-                                            </div>
-                                            <hr>
                                         </div>
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <p class="mb-0">Email</p>
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <p class="text-muted mb-0" th:text="${viewUser.email}"></p>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <p class="mb-0">Número </p>
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <p class="text-muted mb-0"  th:text="${viewUser.phoneNumber}"></p>
+                                            </div>
+                                        </div>
+                                        <hr>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
                 </div>
             </div>
             <!-- content-wrapper ends -->

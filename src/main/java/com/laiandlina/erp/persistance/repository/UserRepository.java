@@ -13,7 +13,7 @@ import java.util.*;
 public interface UserRepository extends JpaRepository<User, Integer> {
     Optional<User> findByEmail(String email);
     Boolean existsByEmail(String email);
-
+    User getUserById(Integer id);
     User getByEmail(String email);
 
     @Query(nativeQuery = true, value = "select * from vw_user_department where email = ?")
@@ -36,4 +36,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Transactional
     @Query(value = "update user u set u.url_photo = ?  where u.id = ?", nativeQuery = true)
     void saveUserPicture(String firstname, Integer userId);
+
+
 }
